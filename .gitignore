@@ -1,0 +1,9 @@
+.env
+cogs/dybalajr.py
+cogs/fecha.py
+cogs/hdp.py
+cogs/coin.py
+cogs/random.py
+directed-will-448512-t0-48e9d6aadf65.json
+changelog.odt
+databases/__pycache__/
