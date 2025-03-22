@@ -1,17 +1,23 @@
 from discord.ext import commands
+import databases.translations
 
 class cardsCog(commands.Cog):
+    dict=databases.translations.tradingListComandos
     def __init__(self, bot, connection):
         self.bot = bot
         self.connection = connection
+        self.cartas_channel_id = [1318194896879882253, 1353112265897017456]
 
-    @commands.command()
+    @commands.command(name="tengocartas", aliases=["fortrade", "ft"])
     async def tengocartas(self, ctx, *, new_cards: str): # Replaces existing text in cells
         try:
+            if ctx.channel.id not in self.cartas_channel_id:
+                await ctx.send("Not the channel, go to <#1353112265897017456>.")
+                return            
             user_name = ctx.author.name
 
             connection_excel = self.connection()
-            sheet = connection_excel.worksheet("TCG_Tengo")
+            sheet = connection_excel.worksheet("For_Trade")
 
             # Checking if the user already exists in the sheet
             existing_rows = sheet.get_all_values()
@@ -26,24 +32,27 @@ class cardsCog(commands.Cog):
                 user_row = len(existing_rows) + 1
                 sheet.update_cell(user_row, 1, user_name)
 
-            # Cards go in the following columns
+
             cards = new_cards.split("-")
             for col, card in enumerate(cards, start=2):
                 sheet.update_cell(user_row, col, card)
 
-            await ctx.send("Tus cards han sido actualizadas correctamente en la hoja de cálculo.") # Confirmation message in Spanish, will be used multiple times
+            await ctx.send(self.dict[ctx.invoked_with][0]) # Confirmation message
 
         except Exception as e:
-            await ctx.send(f"Ha ocurrido un error: {e}") # Exception message in Spanish
+            await ctx.send(f"Error: {e}")
 
 
-    @commands.command()
+    @commands.command(name="buscocartas", aliases=["lookingfor", "lf"])
     async def buscocartas(self, ctx, *, new_cards: str): # Replaces existing text in cells
         try:
+            if ctx.channel.id not in self.cartas_channel_id:
+                await ctx.send("Not the channel, go to <#1353112265897017456>.")
+                return
             user_name = ctx.author.name
 
             connection_excel = self.connection()
-            sheet = connection_excel.worksheet("TCG_Busco")
+            sheet = connection_excel.worksheet("Looking_For")
 
             existing_rows = sheet.get_all_values()
             user_row = None
@@ -61,19 +70,22 @@ class cardsCog(commands.Cog):
             for col, card in enumerate(cards, start=2):
                 sheet.update_cell(user_row, col, card)
 
-            await ctx.send("Tus cartas han sido actualizadas correctamente en la hoja de cálculo.")
+            await ctx.send(self.dict[ctx.invoked_with][0])
 
         except Exception as e:
-            await ctx.send(f"Ha ocurrido un error: {e}")
+            await ctx.send(f"Error: {e}")
 
-    @commands.command()
-    async def buscarcard(self, ctx, *, card: str):
+    @commands.command(name="buscarcarta", aliases=["search"])
+    async def buscarcarta(self, ctx, *, card: str):
         """
         Looks for a card and sends all the users who have it.
         """
         try:
+            if ctx.channel.id not in self.cartas_channel_id:
+                await ctx.send("Not the channel, go to <#1353112265897017456>.")
+                return
             connection_excel = self.connection()
-            sheet = connection_excel.worksheet("TCG_Tengo")
+            sheet = connection_excel.worksheet("For_Trade")
 
             existing_rows = sheet.get_all_values()
             users_with_card = []
@@ -84,20 +96,23 @@ class cardsCog(commands.Cog):
 
             if users_with_card:
                 users = "\n".join(users_with_card)
-                await ctx.send(f"Usuarios con la carta '{card}':\n{users}")
+                await ctx.send(f"Users:\n{users}")
             else:
-                await ctx.send(f"No se han encontrado usuarios con la carta '{card}'.")
+                await ctx.send(self.dict[ctx.invoked_with][1].format(card=card))
 
         except Exception as e:
-            await ctx.send(f"Ha ocurrido un error: {e}")
+            await ctx.send(f"Error: {e}")
 
-    @commands.command()
+    @commands.command(name="tengocartasañadir", aliases=["fortradeadd", "fta"])
     async def tengocartasañadir(self, ctx, *, new_cards: str): # Adds text to the existing one
         try:
+            if ctx.channel.id not in self.cartas_channel_id:
+                await ctx.send("Not the channel, go to <#1353112265897017456>.")
+                return
             user_name = ctx.author.name
 
             connection_excel = self.connection()
-            sheet = connection_excel.worksheet("TCG_Tengo")
+            sheet = connection_excel.worksheet("For_Trade")
 
             existing_rows = sheet.get_all_values()
             user_row = None
@@ -121,20 +136,23 @@ class cardsCog(commands.Cog):
 
                 sheet.update_cell(user_row, col, new_content)
 
-            await ctx.send("Tus cartas han sido actualizadas correctamente en la hoja de cálculo.")
+                await ctx.send(self.dict[ctx.invoked_with][0])
 
         except Exception as e:
-            await ctx.send(f"Ha ocurrido un error: {e}")
+            await ctx.send(f"Error: {e}")
 
 
-    @commands.command()
+    @commands.command(name="buscocartasañadir", aliases=["lookingforadd", "lfa"])
     async def buscocartasañadir(self, ctx, *, new_cards: str): # Adds text to the existing one
 
         try:
+            if ctx.channel.id not in self.cartas_channel_id:
+                await ctx.send("Not the channel, go to <#1353112265897017456>.")
+                return
             user_name = ctx.author.name
 
             connection_excel = self.connection()
-            sheet = connection_excel.worksheet("TCG_Busco")
+            sheet = connection_excel.worksheet("Looking_For")
 
             existing_rows = sheet.get_all_values()
             user_row = None
@@ -158,10 +176,12 @@ class cardsCog(commands.Cog):
                 new_content = f"{current_content}, {card}".strip() 
 
                 sheet.update_cell(user_row, col, new_content)
-            await ctx.send("Tus cartas han sido actualizadas correctamente en la hoja de cálculo.")
-
+            await ctx.send(self.dict[ctx.invoked_with][0])
+            
         except Exception as e:
-            await ctx.send(f"Ha ocurrido un error: {e}")
+            await ctx.send(f"Error: {e}")
+
+
 
 async def setup(bot):
     from databases.SheetConnection import connectSheet

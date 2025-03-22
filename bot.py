@@ -4,6 +4,7 @@ import os
 from databases.DBConnection import *
 from databases.SheetConnection import *
 from dotenv import load_dotenv
+import asyncio
 
 intents = discord.Intents.default()
 intents.messages = True
@@ -25,18 +26,7 @@ async def load_cogs():
 @bot.event
 async def on_ready():
     print(f"¡Bot conectado como {bot.user}!")
-    connectionBBDD=connectDB()
-    if connectionBBDD:
-        print(f"El bot se ha conectado a la base de datos {config['database']}")
-    else:
-        print(f"Error al conectarse a la base de datos {config['database']}")
-    
-    connectionExcel=connectSheet()
-    if connectionExcel:
-        print(f"El bot se ha conectado a la hoja de cálculo {sheetName}")
-    else:
-        print(f"Error al conectarse a la hoja de cálculo {sheetName}")
-    
+
 
 async def main():
     bot.connectionBBDD = connectDB()
@@ -46,8 +36,4 @@ async def main():
         await load_cogs()
         await bot.start(os.getenv("BOT_TOKEN"))
 
-
-# Iniciar el bot
-import asyncio
 asyncio.run(main())
-

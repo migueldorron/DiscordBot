@@ -7,3 +7,6 @@ cogs/random.py
 directed-will-448512-t0-48e9d6aadf65.json
 changelog.odt
 databases/__pycache__/
+cogs/query.py
+guardarmensajes.py
+testeo.txt
