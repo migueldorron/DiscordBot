@@ -93,15 +93,21 @@ class cardsCog(commands.Cog):
             users_with_card = []
 
             for row in existing_rows:
-                if any(card.lower() in cell.lower() for cell in row if cell):
-                    users_with_card.append(row[0])
+                for column_rarity, cell in enumerate(row):  # Recorremos cada celda con su índice
+                    if cell and card.lower() in cell.lower():
+                        column_header = existing_rows[0][column_rarity]  # Primer valor de esa columna
+                        users_with_card.append(row[0] + " - " + column_header)
 
             if users_with_card:
                 users = "\n".join(users_with_card)
                 await ctx.send(f"{sheet.title}\n{users}")
             else:
                 await ctx.send(self.dict[ctx.invoked_with][0].format(card=card, sheet=sheet.title))
+
+
             await ctx.send("----")
+
+
             sheet = connection_excel.worksheet("Looking_For")
             existing_rows = sheet.get_all_values()
             users_with_card = []
