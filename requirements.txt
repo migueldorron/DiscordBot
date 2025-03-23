@@ -32,3 +32,4 @@ typing_extensions==4.12.2
 urllib3==2.3.0
 websockets==15.0
 yarl==1.18.3
+discord.py=2.4.0
