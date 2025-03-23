@@ -84,6 +84,7 @@ class cardsCog(commands.Cog):
             if ctx.channel.id not in self.cartas_channel_id:
                 await ctx.send("Not the channel, go to <#1353112265897017456>.")
                 return
+            
             connection_excel = self.connection()
             sheet = connection_excel.worksheet("For_Trade")
 
@@ -98,7 +99,7 @@ class cardsCog(commands.Cog):
                 users = "\n".join(users_with_card)
                 await ctx.send(f"Users:\n{users}")
             else:
-                await ctx.send(self.dict[ctx.invoked_with][1].format(card=card))
+                await ctx.send(self.dict[ctx.invoked_with][0].format(card=card))
 
         except Exception as e:
             await ctx.send(f"Error: {e}")

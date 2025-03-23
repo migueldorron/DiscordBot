@@ -20,14 +20,15 @@ tradingListComandos = {
     "buscocartas":["Tus cartas han sido actualizadas correctamente en la hoja de cálculo.", "No se han encontrado usuarios con la carta '{card}'."],
     "tengocartasañadir":["Tus cartas han sido actualizadas correctamente en la hoja de cálculo.", "No se han encontrado usuarios con la carta '{card}'."],
     "buscocartasañadir":["Tus cartas han sido actualizadas correctamente en la hoja de cálculo.", "No se han encontrado usuarios con la carta '{card}'."],
-    "lookingfor":["Your cards have been successfully updated in the sheet.", "No users found with '{card}'."],
-    "lf":["Your cards have been successfully updated in the sheet.", "No users found with '{card}'."],
-    "fortrade":["Your cards have been successfully updated in the sheet.", "No users found with '{card}'."],
-    "ft":["Your cards have been successfully updated in the sheet.", "No users found with '{card}'."],
-    "lookingforadd":["Your cards have been successfully updated in the sheet.", "No users found with '{card}'."],
-    "lfa":["Your cards have been successfully updated in the sheet.", "No users found with '{card}'."],
-    "fortradeadd":["Your cards have been successfully updated in the sheet.", "No users found with '{card}'."],
-    "fta":["Your cards have been successfully updated in the sheet.", "No users found with '{card}'."]
+    "lookingfor":["Your cards have been successfully updated in the sheet."],
+    "lf":["Your cards have been successfully updated in the sheet."],
+    "fortrade":["Your cards have been successfully updated in the sheet."],
+    "ft":["Your cards have been successfully updated in the sheet."],
+    "lookingforadd":["Your cards have been successfully updated in the sheet."],
+    "lfa":["Your cards have been successfully updated in the sheet."],
+    "fortradeadd":["Your cards have been successfully updated in the sheet."],
+    "fta":["Your cards have been successfully updated in the sheet."],
+    "search":["No users found with '{card}'."]
 }
 
 usersComandos={
