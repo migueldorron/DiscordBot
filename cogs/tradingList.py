@@ -88,6 +88,7 @@ class cardsCog(commands.Cog):
             connection_excel = self.connection()
             sheet = connection_excel.worksheet("For_Trade")
 
+###
             existing_rows = sheet.get_all_values()
             users_with_card = []
 
@@ -97,9 +98,23 @@ class cardsCog(commands.Cog):
 
             if users_with_card:
                 users = "\n".join(users_with_card)
-                await ctx.send(f"Users:\n{users}")
+                await ctx.send(f"{sheet.title}\n{users}")
             else:
-                await ctx.send(self.dict[ctx.invoked_with][0].format(card=card))
+                await ctx.send(self.dict[ctx.invoked_with][0].format(card=card, sheet=sheet.title))
+
+            sheet = connection_excel.worksheet("Looking_For")
+            existing_rows = sheet.get_all_values()
+            users_with_card = []
+
+            for row in existing_rows:
+                if any(card.lower() in cell.lower() for cell in row if cell):
+                    users_with_card.append(row[0])
+
+            if users_with_card:
+                users = "\n".join(users_with_card)
+                await ctx.send(f"{sheet.title}\n{users}")
+            else:
+                await ctx.send(self.dict[ctx.invoked_with][0].format(card=card, sheet=sheet.title))
 
         except Exception as e:
             await ctx.send(f"Error: {e}")

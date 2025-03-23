@@ -28,7 +28,7 @@ tradingListComandos = {
     "lfa":["Your cards have been successfully updated in the sheet."],
     "fortradeadd":["Your cards have been successfully updated in the sheet."],
     "fta":["Your cards have been successfully updated in the sheet."],
-    "search":["No users found with '{card}'."]
+    "search":["No users found with '{card}' in {sheet}."]
 }
 
 usersComandos={
