@@ -88,15 +88,19 @@ class cardsCog(commands.Cog):
             connection_excel = self.connection()
             sheet = connection_excel.worksheet("For_Trade")
 
-###
+
             existing_rows = sheet.get_all_values()
             users_with_card = []
 
             for row in existing_rows:
-                for column_rarity, cell in enumerate(row):  # Recorremos cada celda con su índice
-                    if cell and card.lower() in cell.lower():
-                        column_header = existing_rows[0][column_rarity]  # Primer valor de esa columna
-                        users_with_card.append(row[0] + " - " + column_header)
+                for column_rarity, cell in enumerate(row):
+                    if cell:
+                        cards_in_cell = [c.strip() for c in cell.split(',')]
+                        for c in cards_in_cell:
+                            if card.lower() in c.lower():
+                                column_header = existing_rows[0][column_rarity]
+                                users_with_card.append(f"{row[0]} - {c} ({column_header})")
+                                break
 
             if users_with_card:
                 users = "\n".join(users_with_card)
@@ -113,10 +117,14 @@ class cardsCog(commands.Cog):
             users_with_card = []
 
             for row in existing_rows:
-                for column_rarity, cell in enumerate(row):  # Recorremos cada celda con su índice
-                    if cell and card.lower() in cell.lower():
-                        column_header = existing_rows[0][column_rarity]  # Primer valor de esa columna
-                        users_with_card.append(row[0] + " - " + column_header)
+                for column_rarity, cell in enumerate(row):
+                    if cell:
+                        cards_in_cell = [c.strip() for c in cell.split(',')]
+                        for c in cards_in_cell:
+                            if card.lower() in c.lower():
+                                column_header = existing_rows[0][column_rarity]
+                                users_with_card.append(f"{row[0]} - {c} ({column_header})")
+                                break
 
             if users_with_card:
                 users = "\n".join(users_with_card)
