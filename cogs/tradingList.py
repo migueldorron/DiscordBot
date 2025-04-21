@@ -96,9 +96,10 @@ class cardsCog(commands.Cog):
 
 
     @commands.command(name="buscarusuario", aliases=["searchuser"])
-    async def buscarusuario(self, ctx, *, user, rarity):
+    async def buscarusuario(self, ctx, *, args: str):
         try:
             await self.channel_check(ctx)
+            user, rarity = [x.strip() for x in args.split(',')]
             connection_excel = self.connection()
             sheet = connection_excel.worksheet("For_Trade")
 
