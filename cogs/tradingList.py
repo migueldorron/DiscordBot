@@ -100,6 +100,7 @@ class cardsCog(commands.Cog):
         try:
             await self.channel_check(ctx)
             user, rarity = [x.strip() for x in args.split(',')]
+            rarity = int(rarity)
             connection_excel = self.connection()
             sheet = connection_excel.worksheet("For_Trade")
 
