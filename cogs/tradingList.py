@@ -113,6 +113,21 @@ class cardsCog(commands.Cog):
             await ctx.send(f"Error: {e}")
 
 
+    @commands.command(name="buscarusuario", aliases=["searchuser"])
+    async def buscarusuario(self, ctx, *, user: str):
+        try:
+            await self.channel_check(ctx)
+            connection_excel = self.connection()
+            sheet = connection_excel.worksheet("For_Trade")
+
+            for row in range(2,sheet.row_count+1):
+                if sheet.cell(row,1).value==user:
+                    for rarity in range(3,6):
+                        await ctx.send(f"{sheet.cell(1,rarity).value}: {sheet.cell(row,rarity).value}")
+                    break
+
+        except Exception as e:
+            await ctx.send(f"Error: {e}")
 
     async def channel_check(self, ctx):
         if ctx.channel.id not in self.cartas_channel_id:
