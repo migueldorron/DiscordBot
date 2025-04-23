@@ -28,7 +28,9 @@ tradingListComandos = {
     "lfa":["Your cards have been successfully updated in the sheet."],
     "fortradeadd":["Your cards have been successfully updated in the sheet."],
     "fta":["Your cards have been successfully updated in the sheet."],
-    "search":["No users found with '{card}' in {sheet}."]
+    "search":["No users found with '{card}' in {sheet}."],
+    "searchuser":["Either user not found or you used the wrong format for the command.", "Rarity must be a number"],
+    "buscarusuario":["El usuario no fue encontrado o usaste el formato equivocado para el comando.", "La rareza debe estar en números."]
 }
 
 usersComandos={
