@@ -10,7 +10,7 @@ class cardsCog(commands.Cog):
         self.cartas_channel_id = [1318194896879882253, 1353112265897017456]
 
     @commands.command(name="fortrade", aliases=["tengocartas", "ft"], 
-                      help="Overwrites the cards you have to trade, using dashes to move to the next rarity. Cards range from 2 Diamonds to 1 Star. Aliases: ft. \n Example: -fortrade Wartortle, Charmeleon (GA) - Gardevoir, Greninja, - Pachirisu EX, Charizard EX (SR) - Spiritomb, Pidgeot. \n If you want to leave a category blank, just don't type anything and write the next dash.", 
+                      help="Overwrites the cards you have to trade, using dashes to move to the next rarity. Cards range from 2 Diamonds to 1 Star. Aliases: ft. \n\n Example: -fortrade Wartortle, Charmeleon (GA) - Gardevoir, Greninja, - Pachirisu EX, Charizard EX (SR) - Spiritomb, Pidgeot. \n\n If you want to leave a category blank, just don't type anything and write the next dash.", 
                       brief="Cards")
     async def tengocartas(self, ctx, *, new_cards: str): # Replaces existing text in cells
         try:
@@ -29,7 +29,9 @@ class cardsCog(commands.Cog):
             await ctx.send(f"Error: {e}")
 
 
-    @commands.command(name="lookingfor", aliases=["buscocartas", "lf"], help="Overwrites the cards you are looking for. Aliases: lf.", brief="Cards")
+    @commands.command(name="lookingfor", aliases=["buscocartas", "lf"], 
+                      help="Overwrites the cards you have to trade, using dashes to move to the next rarity. Cards range from 2 Diamonds to 1 Star. Aliases: lf. \n\n Example: -lookingfor Wartortle, Charmeleon (GA) - Gardevoir, Greninja, - Pachirisu EX, Charizard EX (SR) - Spiritomb, Pidgeot. \n\n If you want to leave a category blank, just don't type anything and write the next dash.", 
+                      brief="Cards")
     async def buscocartas(self, ctx, *, new_cards: str): # Replaces existing text in cells
         try:
             if not await self.channel_check(ctx):
@@ -49,7 +51,9 @@ class cardsCog(commands.Cog):
             await ctx.send(f"Error: {e}")
 
 
-    @commands.command(name="search", aliases=["buscarcarta"], help="Looks for a card and sends everyone who has or is looking for it.", brief="Cards")
+    @commands.command(name="search", aliases=["buscarcarta"], 
+                    help="Looks for a card and sends everyone who has or is looking for it. \n\n Example: -search Dragonite",
+                    brief="Cards")
     async def buscarcarta(self, ctx, *, card: str):
         try:
             if not await self.channel_check(ctx):
@@ -62,7 +66,9 @@ class cardsCog(commands.Cog):
         except Exception as e:
             await ctx.send(f"Error: {e}")
 
-    @commands.command(name="fortradeadd", aliases=["tengocartasañadir", "fta"], help="Adds the cards you have to trade to the existing ones. Aliases: fta.", brief="Cards")
+    @commands.command(name="fortradeadd", aliases=["tengocartasañadir", "fta"], 
+                      help="Overwrites the cards you have to trade, using dashes to move to the next rarity. Cards range from 2 Diamonds to 1 Star. Aliases: fta. \n\n Example: -fortradeadd Wartortle, Charmeleon (GA) - Gardevoir, Greninja, - Pachirisu EX, Charizard EX (SR) - Spiritomb, Pidgeot. \n\n If you want to leave a category blank, just don't type anything and write the next dash.", 
+                      brief="Cards")
     async def tengocartasañadir(self, ctx, *, new_cards: str): # Adds text to the existing one
         try:
             if not await self.channel_check(ctx):
@@ -80,7 +86,9 @@ class cardsCog(commands.Cog):
         except Exception as e:
             await ctx.send(f"Error: {e}")
 
-    @commands.command(name="lookingforadd", aliases=["buscocartasañadir", "lfa"], help="Adds the cards you are looking for to the existing ones. Aliases: lfa.", brief="Cards")
+    @commands.command(name="lookingforadd", aliases=["buscocartasañadir", "lfa"], 
+                      help="Overwrites the cards you have to trade, using dashes to move to the next rarity. Cards range from 2 Diamonds to 1 Star. Aliases: lfa. \n\n Example: -lookingforadd Wartortle, Charmeleon (GA) - Gardevoir, Greninja, - Pachirisu EX, Charizard EX (SR) - Spiritomb, Pidgeot. \n\n If you want to leave a category blank, just don't type anything and write the next dash.", 
+                      brief="Cards")    
     async def buscocartasañadir(self, ctx, *, new_cards: str):
         try:
             if not await self.channel_check(ctx):
@@ -98,7 +106,9 @@ class cardsCog(commands.Cog):
         except Exception as e:
             await ctx.send(f"Error: {e}")
 
-    @commands.command(name="searchuser", aliases=["buscarusuario"], help="Returns what a user has to offer. You can specify rarity ranging from 3 to 5 (3 diamonds, EX, Full Art).", brief="Cards")
+    @commands.command(name="searchuser", aliases=["buscarusuario"], 
+                      help="Returns what a user has to offer. You can specify rarity ranging from 3 to 5 (3 diamonds, EX, Full Art).\n\n Example: -searchuser dorron, 4", 
+                      brief="Cards")
     async def buscarusuario(self, ctx, *, args: str):
         try:
             if not await self.channel_check(ctx):
@@ -140,7 +150,7 @@ class cardsCog(commands.Cog):
 
     async def channel_check(self, ctx):
         if ctx.channel.id not in self.cartas_channel_id:
-            await ctx.send("Not the correct channel, go to the respective channel, probably <#1353112265897017456>.")
+            await ctx.send("Not the correct channel, go to the correct channel in your server.")
             return False
         return True
 

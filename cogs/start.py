@@ -20,7 +20,7 @@ class StartCog(commands.Cog):
             ),
             color=discord.Color.gold()
         )
-        embed.set_footer(text="Made with :heart: by Dorron • Happy trading!")
+        embed.set_footer(text="Made with ❤️ by Dorron • Happy trading!")
         await ctx.send(embed=embed)
 
 
