@@ -7,47 +7,57 @@ class HelpCog(commands.Cog):
 
         
     @commands.command(name="help", aliases=["ayuda"])
-    async def help_command(self, ctx):
-        embed = discord.Embed(
-            title="📖 Bot Manual",
-            description="Here’s how to use the Trading Bot!",
-            color=discord.Color.blue()
-        )
+    async def help_command(self, ctx, *, command_name: str = None):
+        embed = discord.Embed(color=discord.Color.blue())
 
-        embed.add_field(
-            name="🃏 Trading Commands",
-            value=(
-                "`-tengocartas <cards>` → Replace your card list for trading.\n"
-                "`-buscocartas <cards>` → Replace your card list you are searching for.\n"
-                "`-tengocartasañadir <cards>` → Add cards to your trading list.\n"
-                "`-buscocartasañadir <cards>` → Add cards to your search list.\n"
-            ),
-            inline=False
-        )
+        if command_name is None:
+            embed.title = "📖 Bot Manual"
+            embed.description = "List of available commands:"
 
-        embed.add_field(
-            name="🔎 Search Commands",
-            value=(
-                "`-buscarcarta <card>` → Find users who have a specific card.\n"
-                "`-buscarusuario <username>[, rarity]` → Find all cards or cards by rarity for a user.\n"
-            ),
-            inline=False
-        )
+            embed.add_field(
+                name="🃏 Trading Commands",
+                value="`-tengocartas`, `-buscocartas`, `-tengocartasañadir`, `-buscocartasañadir`",
+                inline=False
+            )
 
-        embed.add_field(
-            name="⚙️ Utility",
-            value=(
-                "`-ping` → Check if the bot is alive.\n"
-                "`-coin` → Flip a coin.\n"
-            ),
-            inline=False
-        )
+            embed.add_field(
+                name="🔎 Search Commands",
+                value="`-buscarcarta`, `-buscarusuario`",
+                inline=False
+            )
 
-        embed.set_footer(text="Use commands exactly as shown. Separate multiple cards with '-' when needed.")
-        
+            embed.add_field(
+                name="⚙️ Utility",
+                value="`-ping`, `-coin`",
+                inline=False
+            )
+
+            embed.set_footer(text="Type `-help [command]` to get detailed info about a specific command.")
+        else:
+            command_name = command_name.lower()
+
+            help_texts = {
+                "tengocartas": "-tengocartas <cards>: Replace your cards for trade. Separate cards with '-'",
+                "buscocartas": "-buscocartas <cards>: Replace your wanted cards. Separate cards with '-'",
+                "tengocartasañadir": "-tengocartasañadir <cards>: Add cards to your trade list.",
+                "buscocartasañadir": "-buscocartasañadir <cards>: Add cards to your wanted list.",
+                "buscarcarta": "-buscarcarta <card>: Find users who have a specific card.",
+                "buscarusuario": "-buscarusuario <user>[, rarity]: Find cards a user has, or filter by rarity.",
+                "ping": "-ping: Check if the bot is alive.",
+                "coin": "-coin: Flip a coin."
+            }
+
+            description = help_texts.get(command_name)
+
+            if description:
+                embed.title = f":information_source: Help: `{command_name}`"
+                embed.description = description
+            else:
+                embed.title = ":x: Command Not Found"
+                embed.description = f"No help available for `{command_name}`."
+
         await ctx.send(embed=embed)
 
-
-       
+        
 async def setup(bot):
     await bot.add_cog(HelpCog(bot))
