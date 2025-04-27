@@ -42,7 +42,7 @@ class usersCog(commands.Cog):
             await ctx.send(f"Error: {e}")
 
     
-    @commands.command(name="añadirid", aliases=["addid"])
+    @commands.command(name="addid", aliases=["añadirid"])
     async def añadirid(self,ctx,id):
         try:
             if ctx.channel.id not in self.cartas_channel_id:
@@ -70,7 +70,7 @@ class usersCog(commands.Cog):
             await ctx.send(f"Ha ocurrido un error: {e}")
 
 
-    @commands.command(name="editarid", aliases=["editid"])
+    @commands.command(name="editid", aliases=["editarid"])
     async def editarid(self, ctx, user :str):
         try:
             if ctx.channel.id not in self.cartas_channel_id:
@@ -102,6 +102,45 @@ class usersCog(commands.Cog):
             
         except Exception as e:
             await ctx.send(f"Error: {e}")
+
+
+    @commands.command(name="searchuser", aliases=["buscarusuario"])
+    async def buscarusuario(self, ctx, *, args: str):
+        try:
+            if not await self.channel_check(ctx):
+                return
+            split_args = [x.strip() for x in args.split(',')]
+            connection_excel = self.connection()
+            sheet = connection_excel.worksheet("For_Trade")
+            data = sheet.get_all_values()
+            user_found = False
+            if len(split_args) == 2:
+                user, rarity = split_args[0].lower(), split_args[1]
+                rarity = int(rarity)
+                for row in data[1:]:
+                    if len(row) > 0 and row[0].lower() == user:
+                        header = data[0][rarity-1] if (rarity-1) < len(data[0]) else "Unknown"
+                        value = row[rarity-1] if (rarity-1) < len(row) else "Wrong rarity."
+                        await ctx.send(f"{header}: {value}")
+                        user_found=True
+                        break
+            elif len(split_args) == 1:
+                user = split_args[0].lower()
+                for row in data[1:]:
+                    if len(row) > 0 and row[0].lower() == user:
+                            user_found=True                        
+                            for index in range(2, 5):
+                                await ctx.send(f"{data[0][index]}: {row[index]}")
+                            break
+            if not user_found:
+                await ctx.send(self.dict[ctx.invoked_with][0])
+
+        except ValueError:
+            await ctx.send(self.dict[ctx.invoked_with][1])
+            return
+        except Exception as e:
+            await ctx.send(f"Error: {e}")
+
 
 
 async def setup(bot):

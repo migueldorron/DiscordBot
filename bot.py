@@ -12,6 +12,7 @@ intents.message_content = True
 intents.dm_messages = True
 
 bot = commands.Bot(command_prefix="-", intents=intents)
+bot.remove_command('help')
 
 async def load_cogs():
     for filename in os.listdir('./cogs'):

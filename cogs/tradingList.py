@@ -9,7 +9,7 @@ class cardsCog(commands.Cog):
         self.connection = connection
         self.cartas_channel_id = [1318194896879882253, 1353112265897017456]
 
-    @commands.command(name="tengocartas", aliases=["fortrade", "ft"])
+    @commands.command(name="fortrade", aliases=["tengocartas", "ft"])
     async def tengocartas(self, ctx, *, new_cards: str): # Replaces existing text in cells
         try:
             if not await self.channel_check(ctx):
@@ -27,7 +27,7 @@ class cardsCog(commands.Cog):
             await ctx.send(f"Error: {e}")
 
 
-    @commands.command(name="buscocartas", aliases=["lookingfor", "lf"])
+    @commands.command(name="lookingfor", aliases=["buscocartas", "lf"])
     async def buscocartas(self, ctx, *, new_cards: str): # Replaces existing text in cells
         try:
             if not await self.channel_check(ctx):
@@ -47,7 +47,7 @@ class cardsCog(commands.Cog):
             await ctx.send(f"Error: {e}")
 
 
-    @commands.command(name="buscarcarta", aliases=["search"])
+    @commands.command(name="search", aliases=["buscarcarta"])
     async def buscarcarta(self, ctx, *, card: str):
         """
         Looks for a card and sends all the users who have it.
@@ -63,7 +63,7 @@ class cardsCog(commands.Cog):
         except Exception as e:
             await ctx.send(f"Error: {e}")
 
-    @commands.command(name="tengocartasañadir", aliases=["fortradeadd", "fta"])
+    @commands.command(name="fortradeadd", aliases=["tengocartasañadir", "fta"])
     async def tengocartasañadir(self, ctx, *, new_cards: str): # Adds text to the existing one
         try:
             if not await self.channel_check(ctx):
@@ -81,7 +81,7 @@ class cardsCog(commands.Cog):
         except Exception as e:
             await ctx.send(f"Error: {e}")
 
-    @commands.command(name="buscocartasañadir", aliases=["lookingforadd", "lfa"])
+    @commands.command(name="lookingforadd", aliases=["buscocartasañadir", "lfa"])
     async def buscocartasañadir(self, ctx, *, new_cards: str): # Adds text to the existing one
         try:
             if not await self.channel_check(ctx):
@@ -99,44 +99,6 @@ class cardsCog(commands.Cog):
         except Exception as e:
             await ctx.send(f"Error: {e}")
 
-
-
-    @commands.command(name="buscarusuario", aliases=["searchuser"])
-    async def buscarusuario(self, ctx, *, args: str):
-        try:
-            if not await self.channel_check(ctx):
-                return
-            split_args = [x.strip() for x in args.split(',')]
-            connection_excel = self.connection()
-            sheet = connection_excel.worksheet("For_Trade")
-            data = sheet.get_all_values()
-            user_found = False
-            if len(split_args) == 2:
-                user, rarity = split_args[0].lower(), split_args[1]
-                rarity = int(rarity)
-                for row in data[1:]:
-                    if len(row) > 0 and row[0].lower() == user:
-                        header = data[0][rarity-1] if (rarity-1) < len(data[0]) else "Unknown"
-                        value = row[rarity-1] if (rarity-1) < len(row) else "Wrong rarity."
-                        await ctx.send(f"{header}: {value}")
-                        user_found=True
-                        break
-            elif len(split_args) == 1:
-                user = split_args[0].lower()
-                for row in data[1:]:
-                    if len(row) > 0 and row[0].lower() == user:
-                            user_found=True                        
-                            for index in range(2, 5):
-                                await ctx.send(f"{data[0][index]}: {row[index]}")
-                            break
-            if not user_found:
-                await ctx.send(self.dict[ctx.invoked_with][0])
-
-        except ValueError:
-            await ctx.send(self.dict[ctx.invoked_with][1])
-            return
-        except Exception as e:
-            await ctx.send(f"Error: {e}")
 
 
     async def channel_check(self, ctx):
