@@ -5,13 +5,8 @@ class StartCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-        
     @commands.command(name="start", help="Gives a quick guide about the bot and its purpose.", brief="Utility")
-    async def help_command(self, ctx):
-        embed = discord.Embed(color=discord.Color.blue())
-
-    @commands.command(name="start", help="Gives a quick guide about the bot and its purpose.", brief="Utility")
-    async def start_command(self, ctx):
+    async def start(self, ctx):
         embed = discord.Embed(
             title="👋 Welcome to DorronBot!",
             description=(
