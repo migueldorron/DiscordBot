@@ -8,7 +8,7 @@ class usersCog(commands.Cog):
         self.connection = connection
         self.cartas_channel_id = [1318194896879882253, 1353112265897017456]
 
-    @commands.command(name="friendcode", help="Returns someone's friend code.", brief="Users")
+    @commands.command(name="friendid", help="Returns someone's friend id.", brief="Users")
     async def friendcode(self, ctx, user :str):
         try:
             if ctx.channel.id not in self.cartas_channel_id:

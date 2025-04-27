@@ -9,7 +9,7 @@ class cardsCog(commands.Cog):
         self.connection = connection
         self.cartas_channel_id = [1318194896879882253, 1353112265897017456]
 
-    @commands.command(name="fortrade", aliases=["tengocartas", "ft"], help="Overwrites the cards you have to trade.", brief="Cards")
+    @commands.command(name="fortrade", aliases=["tengocartas", "ft"], help="Overwrites the cards you have to trade. Aliases: ft.", brief="Cards")
     async def tengocartas(self, ctx, *, new_cards: str): # Replaces existing text in cells
         try:
             if not await self.channel_check(ctx):
@@ -27,7 +27,7 @@ class cardsCog(commands.Cog):
             await ctx.send(f"Error: {e}")
 
 
-    @commands.command(name="lookingfor", aliases=["buscocartas", "lf"], help="Overwrites the cards you are looking for.", brief="Cards")
+    @commands.command(name="lookingfor", aliases=["buscocartas", "lf"], help="Overwrites the cards you are looking for. Aliases: lf.", brief="Cards")
     async def buscocartas(self, ctx, *, new_cards: str): # Replaces existing text in cells
         try:
             if not await self.channel_check(ctx):
@@ -60,7 +60,7 @@ class cardsCog(commands.Cog):
         except Exception as e:
             await ctx.send(f"Error: {e}")
 
-    @commands.command(name="fortradeadd", aliases=["tengocartasañadir", "fta"], help="Adds the cards you have to trade to the existing ones.", brief="Cards")
+    @commands.command(name="fortradeadd", aliases=["tengocartasañadir", "fta"], help="Adds the cards you have to trade to the existing ones. Aliases: fta.", brief="Cards")
     async def tengocartasañadir(self, ctx, *, new_cards: str): # Adds text to the existing one
         try:
             if not await self.channel_check(ctx):
@@ -78,7 +78,7 @@ class cardsCog(commands.Cog):
         except Exception as e:
             await ctx.send(f"Error: {e}")
 
-    @commands.command(name="lookingforadd", aliases=["buscocartasañadir", "lfa"], help="Adds the cards you are looking for to the existing ones.", brief="Cards")
+    @commands.command(name="lookingforadd", aliases=["buscocartasañadir", "lfa"], help="Adds the cards you are looking for to the existing ones. Aliases: lfa.", brief="Cards")
     async def buscocartasañadir(self, ctx, *, new_cards: str):
         try:
             if not await self.channel_check(ctx):

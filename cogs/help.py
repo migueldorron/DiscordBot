@@ -6,7 +6,7 @@ class HelpCog(commands.Cog):
         self.bot = bot
 
         
-    @commands.command(name="help", aliases=["ayuda"])
+    @commands.command(name="help", aliases=["ayuda"], help="Help command that lists all the commands", brief="Utility")
     async def help_command(self, ctx, *, command_name: str = None):
         embed = discord.Embed(color=discord.Color.blue())
 
@@ -18,17 +18,20 @@ class HelpCog(commands.Cog):
                 "Cards": [],
                 "Users": [],
                 "Utility": [],
-                "Other": []
+                "Other": [],
+                "Useless": []
             }
 
             for command in self.bot.commands:
                 if command.hidden:
                     continue  # Skip hidden/internal commands
 
-                category = command.brief or "Not useful, ignore these."
-                cmd_name = f"`-{command.name}`"
-                categorized_commands.setdefault(category, []).append(cmd_name)
+                category = command.brief or "Useless."
+                command_name = f"`-{command.name}`"
+                categorized_commands.setdefault(category, []).append(command_name)
 
+            for command_list in categorized_commands.values():
+                command_list.sort()
             if categorized_commands["Cards"]:
                 embed.add_field(name=":joker: Cards Commands", value=" ".join(categorized_commands["Cards"]), inline=False)
             if categorized_commands["Users"]:
@@ -36,8 +39,6 @@ class HelpCog(commands.Cog):
             if categorized_commands["Utility"]:
                 embed.add_field(name=":gear: Utility Commands", value=" ".join(categorized_commands["Utility"]), inline=False)
             if categorized_commands["Other"]:
-                embed.add_field(name=":package: Other", value=" ".join(categorized_commands["Other"]), inline=False)
-            if categorized_commands["Not useful, ignore these."]:
                 embed.add_field(name=":package: Other", value=" ".join(categorized_commands["Other"]), inline=False)
 
             embed.set_footer(text="Type `-help [command]` to get detailed info about a specific command.")
