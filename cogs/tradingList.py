@@ -9,7 +9,9 @@ class cardsCog(commands.Cog):
         self.connection = connection
         self.cartas_channel_id = [1318194896879882253, 1353112265897017456]
 
-    @commands.command(name="fortrade", aliases=["tengocartas", "ft"], help="Overwrites the cards you have to trade. Aliases: ft.", brief="Cards")
+    @commands.command(name="fortrade", aliases=["tengocartas", "ft"], 
+                      help="Overwrites the cards you have to trade, using dashes to move to the next rarity. Cards range from 2 Diamonds to 1 Star. Aliases: ft. \n Example: -fortrade Wartortle, Charmeleon (GA) - Gardevoir, Greninja, - Pachirisu EX, Charizard EX (SR) - Spiritomb, Pidgeot. \n If you want to leave a category blank, just don't type anything and write the next dash.", 
+                      brief="Cards")
     async def tengocartas(self, ctx, *, new_cards: str): # Replaces existing text in cells
         try:
             if not await self.channel_check(ctx):
