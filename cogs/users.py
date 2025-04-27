@@ -70,7 +70,7 @@ class usersCog(commands.Cog):
             await ctx.send(f"Ha ocurrido un error: {e}")
 
 
-    @commands.command(name="editid", aliases=["editarid"], help="Edits your current ID in the sheet.", brief="Cards")
+    @commands.command(name="editid", aliases=["editarid"], help="Edits your current ID in the sheet.", brief="Users")
     async def editarid(self, ctx, user :str):
         try:
             if ctx.channel.id not in self.cartas_channel_id:
