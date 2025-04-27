@@ -12,52 +12,43 @@ class HelpCog(commands.Cog):
 
         if command_name is None:
             embed.title = "📖 Bot Manual"
-            embed.description = "List of available commands:"
+            embed.description = "Here’s a list of available commands:"
 
-            embed.add_field(
-                name="🃏 Trading Commands",
-                value="`-tengocartas`, `-buscocartas`, `-tengocartasañadir`, `-buscocartasañadir`",
-                inline=False
-            )
+            categorized_commands = {
+                "Cards": [],
+                "Users": [],
+                "Utility": [],
+                "Other": []
+            }
 
-            embed.add_field(
-                name="🔎 Search Commands",
-                value="`-buscarcarta`, `-buscarusuario`",
-                inline=False
-            )
+            for command in self.bot.commands:
+                if command.hidden:
+                    continue  # Skip hidden/internal commands
 
-            embed.add_field(
-                name="⚙️ Utility",
-                value="`-ping`, `-coin`",
-                inline=False
-            )
+                category = command.brief or "Other"
+                cmd_name = f"`-{command.name}`"
+                categorized_commands.setdefault(category, []).append(cmd_name)
+
+            if categorized_commands["Cards"]:
+                embed.add_field(name=":joker: Cards Commands", value=" ".join(categorized_commands["Cards"]), inline=False)
+            if categorized_commands["Users"]:
+                embed.add_field(name=":mag_right: Users Commands", value=" ".join(categorized_commands["Users"]), inline=False)
+            if categorized_commands["Utility"]:
+                embed.add_field(name=":gear: Utility Commands", value=" ".join(categorized_commands["Utility"]), inline=False)
+            if categorized_commands["Other"]:
+                embed.add_field(name=":package: Other", value=" ".join(categorized_commands["Other"]), inline=False)
 
             embed.set_footer(text="Type `-help [command]` to get detailed info about a specific command.")
         else:
-            command_name = command_name.lower()
-
-            help_texts = {
-                "tengocartas": "-tengocartas <cards>: Replace your cards for trade. Separate cards with '-'",
-                "buscocartas": "-buscocartas <cards>: Replace your wanted cards. Separate cards with '-'",
-                "tengocartasañadir": "-tengocartasañadir <cards>: Add cards to your trade list.",
-                "buscocartasañadir": "-buscocartasañadir <cards>: Add cards to your wanted list.",
-                "buscarcarta": "-buscarcarta <card>: Find users who have a specific card.",
-                "buscarusuario": "-buscarusuario <user>[, rarity]: Find cards a user has, or filter by rarity.",
-                "ping": "-ping: Check if the bot is alive.",
-                "coin": "-coin: Flip a coin."
-            }
-
-            description = help_texts.get(command_name)
-
-            if description:
-                embed.title = f":information_source: Help: `{command_name}`"
-                embed.description = description
+            command = self.bot.get_command(command_name.lower())
+            if command:
+                embed.title = f":information_source: Help: `{command.name}`"
+                embed.description = command.help or "No description available."
             else:
                 embed.title = ":x: Command Not Found"
                 embed.description = f"No help available for `{command_name}`."
 
         await ctx.send(embed=embed)
 
-        
 async def setup(bot):
     await bot.add_cog(HelpCog(bot))

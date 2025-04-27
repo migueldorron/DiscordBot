@@ -15,7 +15,7 @@ class ChatGPTCog(commands.Cog):
         self.connectionBBDD = connectionBBDD 
 
     # Command to ask ChatGPT
-    @commands.command(name="chatgpt")
+    @commands.command(name="chatgpt", help="Sends ChatGPT a prompt.", brief="Other")
     async def chatgpt(self, ctx, *, question: str):        
         try:
             response = client.chat.completions.create(

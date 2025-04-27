@@ -3,15 +3,19 @@ mandarEquipoComandos = {
         "Escribe el ID de Discord del usuario al que quieres enviar tu equipo:",
         "El ID proporcionado no es válido. Intenta de nuevo.",
         "No se encontró un usuario con ese ID. Verifica y vuelve a intentarlo.",
-        "Perfecto. Ahora escribe el texto que deseas enviar a {rival_name}, asegurándote de que empiece con ``Team:``",
-        "Datos guardados. Esperando que {rival_name} use el comando para completar el intercambio."
+        "Perfecto. Ahora escribe el texto que deseas enviar a {rival_name}, asegurándote de que empiece con ``Text:``",
+        "Datos guardados. Esperando que {rival_name} use el comando para completar el intercambio.",
+        "No puedo enviar mensajes a ese usuario. Asegúrate de que permita mensajes directos.",
+        "No recibí respuesta a tiempo. El proceso ha sido cancelado."
     ],
     "sendteam": [
         "Write the ID of the user you want to send your team to:",
         "Invalid ID. Try again.",
         "No user with that ID was found. Verify and try again.",
-        "Perfect. Now write the text you want to send to {rival_name}. Make sure it starts with ``Team:``",
-        "Message stored. Now wait for {rival_name} to use the command with you."
+        "Perfect. Now write the text you want to send to {rival_name}. Make sure it starts with ``Text:``",
+        "Message stored. Now wait for {rival_name} to use the command with you.",
+        "Unable to send messages to that user. Please make sure they allow direct messages.",
+        "Didn't get a valid message. Cancelling."
     ]
 }
 
@@ -37,5 +41,5 @@ usersComandos={
     "añadirid":["El usuario ya existe en la lista.","Usuario añadido."],
     "addid":["The user already exists in the list.","User added."],
     "editarid":["El usuario no está en la lista."],
-    "editid":["The user isn't in the list."]
+    "editid":["The user isn't in the list."],
 }

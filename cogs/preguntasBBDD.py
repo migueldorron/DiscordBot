@@ -22,8 +22,8 @@ class PreguntasTCGPCog(commands.Cog):
 
 
     #Adding a question to the database
-    @commands.command(name="agregarpregunta")
-    async def agregarpregunta(self, ctx, *, args:str):
+    @commands.command(name="addquestion", help="For owner use only, if you see this ignore it.")
+    async def addquestion(self, ctx, *, args:str):
 
         #Checking if it's me using the command
         if ctx.author.id != 438078850140864532:
@@ -37,12 +37,12 @@ class PreguntasTCGPCog(commands.Cog):
 
         #Formatting checking
         if not args:
-            await ctx.send("Please, use the proper format (-agregarpregunta Question, Answer1, Answer 2...).")
+            await ctx.send("Please, use the proper format (-addquestion Question, Answer1, Answer 2...).")
             return
         argsList = [arg.strip() for arg in args.split(',') if arg.strip()]
         if len(argsList) < 2:
             print(f"argsList: {argsList}")
-            await ctx.send("Please, use the proper format (-agregarpregunta Question, Answer1, Answer 2...).")
+            await ctx.send("Please, use the proper format (-addquestion Question, Answer1, Answer 2...).")
             return
 
         cursor = self.connectionBBDD.cursor()
@@ -70,8 +70,12 @@ class PreguntasTCGPCog(commands.Cog):
             cursor.close()
 
     #Sending a random question to the chat
-    @commands.command(name="preguntarandom")
+    @commands.command(name="preguntarandom", help="For owner use only, if you see this ignore it.")
     async def preguntarandom(self, ctx):
+
+        if ctx.author.id != 438078850140864532:
+            await ctx.send("You don't own the bot.")
+            return        
 
         if not self.connectionBBDD:
             await ctx.send("Database connection not available.")
@@ -95,8 +99,13 @@ class PreguntasTCGPCog(commands.Cog):
             cursor.close()
 
     #Main command to play with
-    @commands.command(name="trivialtcgp")
+    @commands.command(name="trivialtcgp", help="For owner use only, if you see this ignore it.")
     async def trivialtcgp(self, ctx, *, n: int, tiempo=15):
+
+        if ctx.author.id != 438078850140864532:
+            await ctx.send("You don't own the bot.")
+            return
+        
         if not self.connectionBBDD:
             await ctx.send("Database connection not available.")
             return

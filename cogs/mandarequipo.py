@@ -8,8 +8,9 @@ class EquipoCog(commands.Cog):
         self.bot = bot
         self.match_data = []
 
-    @commands.command(name="mandarequipo", aliases=["sendteam"])
-    async def mandarequipo(self, ctx): #This command is used in order for two players to send text (their teams) at the same time without
+    @commands.command(name="sendteam", aliases=["mandarequipo"], help="Command to share a text/team with another person at the same time, perfect for Open Teams tournaments that let you change team between rounds.", brief="Utility")
+    async def mandarequipo(self, ctx):      
+        #This command is used in order for two players to send text (their teams) at the same time without
         # a middleman or external tools. Specifically designed for open teams tournaments.
 
 
@@ -38,11 +39,11 @@ class EquipoCog(commands.Cog):
                 return (
                     message.author == ctx.author
                     and isinstance(message.channel, discord.DMChannel)
-                    and message.content.startswith("Team:")
+                    and message.content.startswith("Text:")
                 )
 
             text_msg = await self.bot.wait_for('message', check=check_text, timeout=60.0)
-            text_to_send = text_msg.content[len("Team:"):].strip()
+            text_to_send = text_msg.content[len("Text:"):].strip()
 
                 #Bot stores User A, User B and the message the former wants to send to the latter.
             self.match_data.append([ctx.author.id, int(rival_id), text_to_send])
@@ -64,11 +65,11 @@ class EquipoCog(commands.Cog):
 
         #Multiple exceptions
         except discord.errors.Forbidden:
-            await ctx.author.send("No puedo enviar mensajes a ese usuario. Asegúrate de que permita mensajes directos.")
+            await ctx.author.send(self.dict[ctx.invoked_with][5])
         except TimeoutError:
-            await ctx.author.send("No recibí respuesta a tiempo. El proceso ha sido cancelado.")
+            await ctx.author.send(self.dict[ctx.invoked_with][6])
         except Exception as e:
-            await ctx.author.send(f"Ha ocurrido un error inesperado: {str(e)}")
+            await ctx.author.send(f"Error: {str(e)}")
 
 
 async def setup(bot):
