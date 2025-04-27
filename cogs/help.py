@@ -25,7 +25,7 @@ class HelpCog(commands.Cog):
                 if command.hidden:
                     continue  # Skip hidden/internal commands
 
-                category = command.brief or "Other"
+                category = command.brief or "Not useful, ignore these."
                 cmd_name = f"`-{command.name}`"
                 categorized_commands.setdefault(category, []).append(cmd_name)
 
@@ -36,6 +36,8 @@ class HelpCog(commands.Cog):
             if categorized_commands["Utility"]:
                 embed.add_field(name=":gear: Utility Commands", value=" ".join(categorized_commands["Utility"]), inline=False)
             if categorized_commands["Other"]:
+                embed.add_field(name=":package: Other", value=" ".join(categorized_commands["Other"]), inline=False)
+            if categorized_commands["Not useful, ignore these."]:
                 embed.add_field(name=":package: Other", value=" ".join(categorized_commands["Other"]), inline=False)
 
             embed.set_footer(text="Type `-help [command]` to get detailed info about a specific command.")
