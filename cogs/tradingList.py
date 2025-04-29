@@ -200,9 +200,9 @@ class cardsCog(commands.Cog):
             result = "\n".join(
                 f"{card.title()} — {', '.join(card_to_traders[card])}" for card in card_to_traders
             )
-            await ctx.author.send(f"📦 Trades found:\n{result}")
+            await ctx.send(f"📦 Trades found:\n{result}")
         else:
-            await ctx.author.send("No matching trades found.")
+            await ctx.send("No matching trades found.")
 
 
 
