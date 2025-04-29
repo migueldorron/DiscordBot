@@ -179,9 +179,8 @@ class cardsCog(commands.Cog):
             await ctx.send("You haven’t listed any cards in columns D and E.")
             return
 
-        matches = []
         dataForTrade = sheet_trade.get_all_values()
-
+        card_to_traders = {}
         for row in dataForTrade[1:]:
             if not row or row[0].strip().lower() == ctx.author.name.strip().lower():
                 continue  # Skip empty rows and yourself
@@ -192,13 +191,18 @@ class cardsCog(commands.Cog):
                     trader_cards = [card.strip().lower() for card in row[i].split(",") if card.strip()]
                     for card in trader_cards:
                         if card in desired_cards:
-                            matches.append(f"{card.title()} — {trader}")
+                            if card not in card_to_traders:
+                                card_to_traders[card] = [trader]
+                            elif trader not in card_to_traders[card]:
+                                card_to_traders[card].append(trader)
 
-        if matches:
-            result = "\n".join(matches)
-            await ctx.send(f"📦 Trades found:\n{result}")
+        if card_to_traders:
+            result = "\n".join(
+                f"{card.title()} — {', '.join(card_to_traders[card])}" for card in card_to_traders
+            )
+            await ctx.author.send(f"📦 Trades found:\n{result}")
         else:
-            await ctx.send("No matching trades found.")
+            await ctx.author.send("No matching trades found.")
 
 
 
