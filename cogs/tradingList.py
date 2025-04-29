@@ -145,31 +145,60 @@ class cardsCog(commands.Cog):
         except Exception as e:
             await ctx.send(f"Error: {e}")
 
-    @commands.command(name="findtrades", aliases=["buscartrades"],
-                      help="Sends you all the cards you're looking for that someone else is willing to trade.",
-                      brief="Cards")
+
+
+
+    @commands.command(name="findtrades", aliases=["encontrartrades"],
+                    help="Sends you all the cards you're looking for that someone else is willing to trade.",
+                    brief="Cards")
     async def findtrades(self, ctx):
         connection = self.connection()
         sheet_looking = connection.worksheet("Looking_For")
         sheet_trade = connection.worksheet("For_Trade")
 
-        user_row = self.find_user_row_in_looking_for(ctx.author.name, sheet_looking)
-        if not user_row:
-            await ctx.send("No tienes una fila en Looking_For.")
+        dataLookingFor = sheet_looking.get_all_values()
+        rowUser = None
+
+        for row in dataLookingFor[1:]:
+            if row and row[0].strip().lower() == ctx.author.name.strip().lower():
+                rowUser = row
+                break
+
+        if not rowUser:
+            await ctx.send("You don't have cards you're looking for.")
             return
 
-        desired_cards = self.extract_looking_for_cards(user_row)
+        desired_cards = set()
+        for i in [3, 4]:  # Columns D and E
+            if i < len(rowUser) and rowUser[i]:
+                cards = [card.strip().lower() for card in rowUser[i].split(",") if card.strip()]
+                desired_cards.update(cards)
+
         if not desired_cards:
-            await ctx.send("No has escrito cartas en columnas D y E.")
+            await ctx.send("You haven’t listed any cards in columns D and E.")
             return
 
-        matches = self.compare_with_for_trade(ctx.author.name, desired_cards, sheet_trade)
+        matches = []
+        dataForTrade = sheet_trade.get_all_values()
+
+        for row in dataForTrade[1:]:
+            if not row or row[0].strip().lower() == ctx.author.name.strip().lower():
+                continue  # Skip empty rows and yourself
+
+            trader = row[0]
+            for i in [3, 4]:  # Columns D and E
+                if i < len(row) and row[i]:
+                    trader_cards = [card.strip().lower() for card in row[i].split(",") if card.strip()]
+                    for card in trader_cards:
+                        if card in desired_cards:
+                            matches.append(f"{card.title()} — {trader}")
 
         if matches:
             result = "\n".join(matches)
-            await ctx.author.send(f"📦 Cartas disponibles que estás buscando:\n{result}")
+            await ctx.author.send(f"📦 Trades found:\n{result}")
         else:
-            await ctx.author.send("Ningún usuario tiene las cartas que estás buscando.")
+            await ctx.author.send("No matching trades found.")
+
 
 
     async def channel_check(self, ctx):
@@ -245,45 +274,6 @@ class cardsCog(commands.Cog):
 
         await self.send_found_cards(ctx, card, sheet, users_with_card)
 
-
-    async def find_user_row_in_looking_for(self, user_name, sheet):
-
-        data = sheet.get_all_values()
-        for row in data[1:]:
-            if row and row[0].strip().lower() == user_name.strip().lower():
-                return row
-        return None
-    
-    async def extract_looking_for_cards(self, user_row):
-
-        desired_cards = set()
-
-        for i in [3, 4]:
-            if i < len(user_row) and user_row[i]:
-                cards = [card.strip().lower() for card in user_row[i].split(",") if card.strip()]
-                desired_cards.update(cards)
-
-        return desired_cards    
-
-
-
-    async def compare_with_for_trade(self, user_name, desired_cards, for_trade_sheet):
-        matches = []
-        data = for_trade_sheet.get_all_values()
-
-        for row in data[1:]:
-            if not row or row[0].strip().lower() == user_name.strip().lower():
-                continue
-
-            trader = row[0]
-            for i in [3, 4]:
-                if i < len(row) and row[i]:
-                    trader_cards = [card.strip().lower() for card in row[i].split(",") if card.strip()]
-                    for card in trader_cards:
-                        if card in desired_cards:
-                            matches.append(f"{card.title()} — {trader}")
-
-        return matches
 async def setup(bot):
     from databases.SheetConnection import connectSheet
     await bot.add_cog(cardsCog(bot, connectSheet))
