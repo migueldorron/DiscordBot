@@ -48,6 +48,10 @@ class cardsCog(commands.Cog):
 
             await ctx.send(self.dict[ctx.invoked_with][0])
 
+            sheet_for_trade = connection_excel.worksheet("For_Trade")
+            result = self.find_trades_for_user(user_name, sheet, sheet_for_trade)
+            await ctx.send(result)
+
         except Exception as e:
             await ctx.send(f"Error: {e}")
 
@@ -103,6 +107,10 @@ class cardsCog(commands.Cog):
             user_row = self.user_already_exists(user_name, sheet, existing_rows, user_row)
             self.add_new_cards(new_cards, sheet, user_row)
             await ctx.send(self.dict[ctx.invoked_with][0])
+
+            sheet_for_trade = connection_excel.worksheet("For_Trade")
+            result = self.find_trades_for_user(user_name, sheet, sheet_for_trade)
+            await ctx.send(result)
             
         except Exception as e:
             await ctx.send(f"Error: {e}")
@@ -157,56 +165,8 @@ class cardsCog(commands.Cog):
         sheet_looking = connection.worksheet("Looking_For")
         sheet_trade = connection.worksheet("For_Trade")
 
-        dataLookingFor = sheet_looking.get_all_values()
-        rowUser = None
-
-        for row in dataLookingFor[1:]:
-            if row and row[0].strip().lower() == ctx.author.name.strip().lower():
-                rowUser = row
-                break
-
-        if not rowUser:
-            await ctx.send("You don't have cards you're looking for.")
-            return
-
-        desired_cards = set()
-        for i in [3, 4]:  # Columns D and E
-            if i < len(rowUser) and rowUser[i]:
-                cards = [card.strip().lower() for card in rowUser[i].split(",") if card.strip()]
-                desired_cards.update(cards)
-
-        if not desired_cards:
-            await ctx.send("You haven’t listed any cards in columns D and E.")
-            return
-
-        dataForTrade = sheet_trade.get_all_values()
-        card_to_traders = {}
-        for row in dataForTrade[1:]:
-            if not row or row[0].strip().lower() == ctx.author.name.strip().lower():
-                continue  # Skip empty rows and yourself
-
-            trader = row[0]
-            for i in [3, 4]:  # Columns D and E
-                if i < len(row) and row[i]:
-                    trader_cards = [card.strip().lower() for card in row[i].split(",") if card.strip()]
-                    for card in trader_cards:
-                        if card in desired_cards:
-                            if card not in card_to_traders:
-                                card_to_traders[card] = [trader]
-                            elif trader not in card_to_traders[card]:
-                                card_to_traders[card].append(trader)
-
-        if card_to_traders:
-            result = "\n".join(
-                f"{card.title()} — {', '.join(card_to_traders[card])}" for card in card_to_traders
-            )
-            await ctx.send(f"📦 Trades found:\n{result}")
-        else:
-            await ctx.send("No matching trades found.")
-
-
-
-
+        result = self.find_trades_for_user(ctx.author.name, sheet_looking, sheet_trade)
+        await ctx.send(result)
 
 
 
@@ -284,6 +244,54 @@ class cardsCog(commands.Cog):
         self.find_cards(card, existing_rows, users_with_card)
 
         await self.send_found_cards(ctx, card, sheet, users_with_card)
+
+    async def find_trades_for_user(self, user_name, sheet_looking, sheet_trade):
+        dataLookingFor = sheet_looking.get_all_values()
+        rowUser = None
+
+        for row in dataLookingFor[1:]:
+            if row and row[0].strip().lower() == user_name.strip().lower():
+                rowUser = row
+                break
+
+        if not rowUser:
+            return "You don't have cards you're looking for."
+
+        desired_cards = set()
+        for i in [3, 4]:
+            if i < len(rowUser) and rowUser[i]:
+                cards = [card.strip().lower() for card in rowUser[i].split(",") if card.strip()]
+                desired_cards.update(cards)
+
+        if not desired_cards:
+            return "You haven’t listed any cards in columns D and E."
+
+        dataForTrade = sheet_trade.get_all_values()
+        card_to_traders = {}
+
+        for row in dataForTrade[1:]:
+            if not row or row[0].strip().lower() == user_name.strip().lower():
+                continue
+
+            trader = row[0]
+            for i in [3, 4]:
+                if i < len(row) and row[i]:
+                    trader_cards = [card.strip().lower() for card in row[i].split(",") if card.strip()]
+                    for card in trader_cards:
+                        if card in desired_cards:
+                            if card not in card_to_traders:
+                                card_to_traders[card] = [trader]
+                            elif trader not in card_to_traders[card]:
+                                card_to_traders[card].append(trader)
+
+        if card_to_traders:
+            result = "\n".join(
+                f"{card.title()} — {', '.join(card_to_traders[card])}" for card in card_to_traders
+            )
+            return f"📦 Users offering what you're looking for:\n{result}"
+        else:
+            return "No one is currently offering the cards you listed."
+
 
 async def setup(bot):
     from databases.SheetConnection import connectSheet
