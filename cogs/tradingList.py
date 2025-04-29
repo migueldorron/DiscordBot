@@ -1,6 +1,7 @@
 from discord.ext import commands
 import databases.translations
 from gspread.utils import rowcol_to_a1
+from collections import defaultdict
 
 class cardsCog(commands.Cog):
     dict=databases.translations.tradingListComandos
@@ -169,35 +170,41 @@ class cardsCog(commands.Cog):
             return
 
         desired_cards = set()
-        for i in [3, 4]:  # Columns D and E
+        for i in [3, 4]:
             if i < len(rowUser) and rowUser[i]:
                 cards = [card.strip().lower() for card in rowUser[i].split(",") if card.strip()]
                 desired_cards.update(cards)
 
         if not desired_cards:
-            await ctx.send("You haven’t listed any cards in columns D and E.")
+            await ctx.send("You don't have EX or Full Art cards you're looking for.")
             return
 
-        matches = []
         dataForTrade = sheet_trade.get_all_values()
+        card_to_traders = defaultdict(list)
 
         for row in dataForTrade[1:]:
             if not row or row[0].strip().lower() == ctx.author.name.strip().lower():
-                continue  # Skip empty rows and yourself
+                continue
 
             trader = row[0]
-            for i in [3, 4]:  # Columns D and E
+            for i in [3, 4]:
                 if i < len(row) and row[i]:
                     trader_cards = [card.strip().lower() for card in row[i].split(",") if card.strip()]
                     for card in trader_cards:
-                        if card in desired_cards:
-                            matches.append(f"{card.title()} — {trader}")
+                        if card in desired_cards and trader not in card_to_traders[card]:
+                            card_to_traders[card].append(trader)
 
-        if matches:
-            result = "\n".join(matches)
-            await ctx.author.send(f"📦 Trades found:\n{result}")
+        if card_to_traders:
+            result = "\n".join(
+                f"{card.title()} — {', '.join(traders)}" for card, traders in card_to_traders.items()
+            )
+            await ctx.context(f"📦 Trades:\n{result}")
         else:
-            await ctx.author.send("No matching trades found.")
+            await ctx.context("No matching trades found.")
+
+
+
+
 
 
 
@@ -206,6 +213,8 @@ class cardsCog(commands.Cog):
             await ctx.send("Not the correct channel, go to the correct channel in your server.")
             return False
         return True
+    
+
 
     def add_new_cards(self, new_cards, sheet, user_row):
         cards = new_cards.split("-")
