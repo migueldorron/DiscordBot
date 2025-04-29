@@ -170,37 +170,35 @@ class cardsCog(commands.Cog):
             return
 
         desired_cards = set()
-        for i in [3, 4]:
+        for i in [3, 4]:  # Columns D and E
             if i < len(rowUser) and rowUser[i]:
                 cards = [card.strip().lower() for card in rowUser[i].split(",") if card.strip()]
                 desired_cards.update(cards)
 
         if not desired_cards:
-            await ctx.send("You don't have EX or Full Art cards you're looking for.")
+            await ctx.send("You haven’t listed any cards in columns D and E.")
             return
 
+        matches = []
         dataForTrade = sheet_trade.get_all_values()
-        card_to_traders = defaultdict(list)
 
         for row in dataForTrade[1:]:
             if not row or row[0].strip().lower() == ctx.author.name.strip().lower():
-                continue
+                continue  # Skip empty rows and yourself
 
             trader = row[0]
-            for i in [3, 4]:
+            for i in [3, 4]:  # Columns D and E
                 if i < len(row) and row[i]:
                     trader_cards = [card.strip().lower() for card in row[i].split(",") if card.strip()]
                     for card in trader_cards:
-                        if card in desired_cards and trader not in card_to_traders[card]:
-                            card_to_traders[card].append(trader)
+                        if card in desired_cards:
+                            matches.append(f"{card.title()} — {trader}")
 
-        if card_to_traders:
-            result = "\n".join(
-                f"{card.title()} — {', '.join(traders)}" for card, traders in card_to_traders.items()
-            )
-            await ctx.context(f"📦 Trades:\n{result}")
+        if matches:
+            result = "\n".join(matches)
+            await ctx.send(f"📦 Trades found:\n{result}")
         else:
-            await ctx.context("No matching trades found.")
+            await ctx.send("No matching trades found.")
 
 
 
