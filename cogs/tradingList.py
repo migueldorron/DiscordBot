@@ -12,7 +12,7 @@ class cardsCog(commands.Cog):
     @commands.command(name="fortrade", aliases=["tengocartas", "ft"], 
                       help="Overwrites the cards you have to trade, using dashes to move to the next rarity. Cards range from 2 Diamonds to 1 Star. Aliases: ft. \n\n Example: -fortrade Wartortle, Charmeleon (GA) - Gardevoir, Greninja, - Pachirisu EX, Charizard EX (SR) - Spiritomb, Pidgeot. \n\n If you want to leave a category blank, just don't type anything and write the next dash.", 
                       brief="Cards")
-    async def tengocartas(self, ctx, *, new_cards: str): # Replaces existing text in cells
+    async def fortrade(self, ctx, *, new_cards: str): # Replaces existing text in cells
         try:
             if not await self.channel_check(ctx):
                 return
@@ -32,7 +32,7 @@ class cardsCog(commands.Cog):
     @commands.command(name="lookingfor", aliases=["buscocartas", "lf"], 
                       help="Overwrites the cards you have to trade, using dashes to move to the next rarity. Cards range from 2 Diamonds to 1 Star. Aliases: lf. \n\n Example: -lookingfor Wartortle, Charmeleon (GA) - Gardevoir, Greninja, - Pachirisu EX, Charizard EX (SR) - Spiritomb, Pidgeot. \n\n If you want to leave a category blank, just don't type anything and write the next dash.", 
                       brief="Cards")
-    async def buscocartas(self, ctx, *, new_cards: str): # Replaces existing text in cells
+    async def lookingfor(self, ctx, *, new_cards: str): # Replaces existing text in cells
         try:
             if not await self.channel_check(ctx):
                 return
@@ -54,7 +54,7 @@ class cardsCog(commands.Cog):
     @commands.command(name="search", aliases=["buscarcarta"], 
                     help="Looks for a card and sends everyone who has or is looking for it. \n\n Example: -search Dragonite",
                     brief="Cards")
-    async def buscarcarta(self, ctx, *, card: str):
+    async def search(self, ctx, *, card: str):
         try:
             if not await self.channel_check(ctx):
                 return 
@@ -69,7 +69,7 @@ class cardsCog(commands.Cog):
     @commands.command(name="fortradeadd", aliases=["tengocartasañadir", "fta"], 
                       help="Overwrites the cards you have to trade, using dashes to move to the next rarity. Cards range from 2 Diamonds to 1 Star. Aliases: fta. \n\n Example: -fortradeadd Wartortle, Charmeleon (GA) - Gardevoir, Greninja, - Pachirisu EX, Charizard EX (SR) - Spiritomb, Pidgeot. \n\n If you want to leave a category blank, just don't type anything and write the next dash.", 
                       brief="Cards")
-    async def tengocartasañadir(self, ctx, *, new_cards: str): # Adds text to the existing one
+    async def fortradeadd(self, ctx, *, new_cards: str): # Adds text to the existing one
         try:
             if not await self.channel_check(ctx):
                 return
@@ -89,7 +89,7 @@ class cardsCog(commands.Cog):
     @commands.command(name="lookingforadd", aliases=["buscocartasañadir", "lfa"], 
                       help="Overwrites the cards you have to trade, using dashes to move to the next rarity. Cards range from 2 Diamonds to 1 Star. Aliases: lfa. \n\n Example: -lookingforadd Wartortle, Charmeleon (GA) - Gardevoir, Greninja, - Pachirisu EX, Charizard EX (SR) - Spiritomb, Pidgeot. \n\n If you want to leave a category blank, just don't type anything and write the next dash.", 
                       brief="Cards")    
-    async def buscocartasañadir(self, ctx, *, new_cards: str):
+    async def lookingforadd(self, ctx, *, new_cards: str):
         try:
             if not await self.channel_check(ctx):
                 return
@@ -145,7 +145,31 @@ class cardsCog(commands.Cog):
         except Exception as e:
             await ctx.send(f"Error: {e}")
 
+    @commands.command(name="findtrades", aliases=["buscartrades"],
+                      help="Sends you all the cards you're looking for that someone else is willing to trade.",
+                      brief="Cards")
+    async def findtrades(self, ctx):
+        connection = self.connection()
+        sheet_looking = connection.worksheet("Looking_For")
+        sheet_trade = connection.worksheet("For_Trade")
 
+        user_row = self.find_user_row_in_looking_for(ctx.author.name, sheet_looking)
+        if not user_row:
+            await ctx.send("No tienes una fila en Looking_For.")
+            return
+
+        desired_cards = self.extract_looking_for_cards(user_row)
+        if not desired_cards:
+            await ctx.send("No has escrito cartas en columnas D y E.")
+            return
+
+        matches = self.compare_with_for_trade(ctx.author.name, desired_cards, sheet_trade)
+
+        if matches:
+            result = "\n".join(matches)
+            await ctx.author.send(f"📦 Cartas disponibles que estás buscando:\n{result}")
+        else:
+            await ctx.author.send("Ningún usuario tiene las cartas que estás buscando.")
 
 
     async def channel_check(self, ctx):
@@ -222,6 +246,44 @@ class cardsCog(commands.Cog):
         await self.send_found_cards(ctx, card, sheet, users_with_card)
 
 
+    async def find_user_row_in_looking_for(self, user_name, sheet):
+
+        data = sheet.get_all_values()
+        for row in data[1:]:
+            if row and row[0].strip().lower() == user_name.strip().lower():
+                return row
+        return None
+    
+    async def extract_looking_for_cards(self, user_row):
+
+        desired_cards = set()
+
+        for i in [3, 4]:
+            if i < len(user_row) and user_row[i]:
+                cards = [card.strip().lower() for card in user_row[i].split(",") if card.strip()]
+                desired_cards.update(cards)
+
+        return desired_cards    
+
+
+
+    async def compare_with_for_trade(self, user_name, desired_cards, for_trade_sheet):
+        matches = []
+        data = for_trade_sheet.get_all_values()
+
+        for row in data[1:]:
+            if not row or row[0].strip().lower() == user_name.strip().lower():
+                continue
+
+            trader = row[0]
+            for i in [3, 4]:
+                if i < len(row) and row[i]:
+                    trader_cards = [card.strip().lower() for card in row[i].split(",") if card.strip()]
+                    for card in trader_cards:
+                        if card in desired_cards:
+                            matches.append(f"{card.title()} — {trader}")
+
+        return matches
 async def setup(bot):
     from databases.SheetConnection import connectSheet
     await bot.add_cog(cardsCog(bot, connectSheet))
