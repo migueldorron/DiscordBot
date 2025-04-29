@@ -21,7 +21,7 @@ class cardsCog(commands.Cog):
             connection_excel = self.connection()
             sheet = connection_excel.worksheet("For_Trade")
             existing_rows = sheet.get_all_values()
-            user_row = self.find_user(user_name,existing_rows)
+            user_row = self.find_user(user_name, existing_rows)
             user_row = self.user_already_exists(user_name, sheet, existing_rows, user_row)
             self.write_cards(new_cards, sheet, user_row)
             await ctx.send(self.dict[ctx.invoked_with][0]) # Confirmation message
@@ -41,13 +41,16 @@ class cardsCog(commands.Cog):
             connection_excel = self.connection()
             sheet = connection_excel.worksheet("Looking_For")
             existing_rows = sheet.get_all_values()
-            user_row = self.find_user(user_name, sheet)
+            user_row = self.find_user(user_name, existing_rows)
             user_row = self.user_already_exists(user_name, sheet, existing_rows, user_row)
 
             self.write_cards(new_cards, sheet, user_row)
 
             await ctx.send(self.dict[ctx.invoked_with][0])
 
+            sheet_for_trade = connection_excel.worksheet("For_Trade")
+            result = self.find_trades_for_user(user_name, sheet, sheet_for_trade)
+            await ctx.send(result)
 
         except Exception as e:
             await ctx.send(f"Error: {e}")
@@ -99,8 +102,8 @@ class cardsCog(commands.Cog):
 
             connection_excel = self.connection()
             sheet = connection_excel.worksheet("Looking_For")
-            existing_rows = sheet.get_all_values()            
-            user_row = self.find_user(user_name, sheet)
+            existing_rows = sheet.get_all_values()
+            user_row = self.find_user(user_name, existing_rows)
             user_row = self.user_already_exists(user_name, sheet, existing_rows, user_row)
             self.add_new_cards(new_cards, sheet, user_row)
             await ctx.send(self.dict[ctx.invoked_with][0])
