@@ -49,7 +49,7 @@ class cardsCog(commands.Cog):
             await ctx.send(self.dict[ctx.invoked_with][0])
 
             sheet_for_trade = connection_excel.worksheet("For_Trade")
-            result = self.find_trades_for_user(user_name, sheet, sheet_for_trade)
+            result = await self.find_trades_for_user(user_name, sheet, sheet_for_trade)
             await ctx.send(result)
 
         except Exception as e:
@@ -109,7 +109,7 @@ class cardsCog(commands.Cog):
             await ctx.send(self.dict[ctx.invoked_with][0])
 
             sheet_for_trade = connection_excel.worksheet("For_Trade")
-            result = self.find_trades_for_user(user_name, sheet, sheet_for_trade)
+            result = await self.find_trades_for_user(user_name, sheet, sheet_for_trade)
             await ctx.send(result)
             
         except Exception as e:
