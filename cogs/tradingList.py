@@ -1,3 +1,4 @@
+import discord
 from discord.ext import commands
 import databases.translations
 from gspread.utils import rowcol_to_a1
@@ -25,7 +26,8 @@ class cardsCog(commands.Cog):
             user_row = self.user_already_exists(user_name, sheet, existing_rows, user_row)
             self.write_cards(new_cards, sheet, user_row)
             await ctx.send(self.dict[ctx.invoked_with][0]) # Confirmation message
-
+            sheet_looking = connection_excel.worksheet("Looking_For")
+            await self.notify_users_who_want_your_cards(user_name, user_row, sheet_looking)
         except Exception as e:
             await ctx.send(f"Error: {e}")
 
@@ -88,6 +90,9 @@ class cardsCog(commands.Cog):
             self.add_new_cards(new_cards, sheet, user_row)
             await ctx.send(self.dict[ctx.invoked_with][0])
 
+            sheet_looking = connection_excel.worksheet("Looking_For")
+            await self.notify_users_who_want_your_cards(user_name, sheet, sheet_looking)
+            
         except Exception as e:
             await ctx.send(f"Error: {e}")
 
@@ -293,6 +298,48 @@ class cardsCog(commands.Cog):
             return "No one is currently offering the cards you listed."
 
 
+
+
+    async def notify_users_who_want_your_cards(self, user_name, user_row, sheet_looking):
+        looking_data = sheet_looking.get_all_values()
+
+        offered_cards = set()
+        for i in [3, 4]:
+            if i < len(user_row) and user_row[i]:
+                cards = [card.strip().lower() for card in user_row[i].split(",") if card.strip()]
+                offered_cards.update(cards)
+
+        if not offered_cards:
+            return
+
+        for row in looking_data[1:]:
+            if not row or row[0].strip().lower() == user_name.strip().lower():
+                continue
+
+            target_user = row[0]
+            wanted_cards = set()
+            for i in [3, 4]:
+                if i < len(row) and row[i]:
+                    cards = [card.strip().lower() for card in row[i].split(",") if card.strip()]
+                    wanted_cards.update(cards)
+
+            matching = []
+            headers = [sheet_looking.get_all_values()[0][i] for i in [3, 4]]  # Get D & E headers
+
+            for i, col_index in enumerate([3, 4]):
+                if col_index < len(user_row) and user_row[col_index]:
+                    cards = [card.strip().lower() for card in user_row[col_index].split(",") if card.strip()]
+                    for card in cards:
+                        if card in wanted_cards:
+                            matching.append(f"{card.title()} - ({headers[i]})")
+            if matching:
+                user_obj = discord.utils.get(self.bot.get_all_members(), name=target_user)
+                if user_obj:
+                    try:
+                        await user_obj.send(f"🎯 {user_name} cards:\n" +
+                                            ", ".join(card.title() for card in matching))
+                    except discord.Forbidden:
+                        pass
 async def setup(bot):
     from databases.SheetConnection import connectSheet
     await bot.add_cog(cardsCog(bot, connectSheet))
