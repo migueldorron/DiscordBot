@@ -303,7 +303,6 @@ class cardsCog(commands.Cog):
 
 
     async def notify_users_who_want_your_cards(self, ctx, user_name, user_row, sheet_looking):
-        await ctx.send("Comando triggereado")
         looking_data = sheet_looking.get_all_values()
         offered_cards = set()
         for i in [3, 4]:
