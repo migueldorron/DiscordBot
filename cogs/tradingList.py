@@ -28,7 +28,7 @@ class cardsCog(commands.Cog):
             await ctx.send(self.dict[ctx.invoked_with][0]) # Confirmation message
             sheet_looking = connection_excel.worksheet("Looking_For")
             row_data = existing_rows[user_row - 1]
-            await self.notify_users_who_want_your_cards(user_name, row_data, sheet_looking)
+            await self.notify_users_who_want_your_cards(user_name, ctx, row_data, sheet_looking)
         except Exception as e:
             await ctx.send(f"Error: {e}")
 
@@ -93,7 +93,7 @@ class cardsCog(commands.Cog):
 
             sheet_looking = connection_excel.worksheet("Looking_For")
             row_data = existing_rows[user_row - 1]
-            await self.notify_users_who_want_your_cards(user_name, row_data, sheet_looking)
+            await self.notify_users_who_want_your_cards(user_name, ctx, row_data, sheet_looking)
 
         except Exception as e:
             await ctx.send(f"Error: {e}")
@@ -302,9 +302,9 @@ class cardsCog(commands.Cog):
 
 
 
-    async def notify_users_who_want_your_cards(self, user_name, user_row, sheet_looking):
+    async def notify_users_who_want_your_cards(self, ctx, user_name, user_row, sheet_looking):
         looking_data = sheet_looking.get_all_values()
-
+        await ctx.send("Comando triggereado")
         offered_cards = set()
         for i in [3, 4]:
             if i < len(user_row) and user_row[i]:
