@@ -337,7 +337,7 @@ class cardsCog(commands.Cog):
                 user_obj = discord.utils.get(self.bot.get_all_members(), name=target_user)
                 if user_obj:
                     try:
-                        await user_obj.send(f"🎯 {user_name} updated their cards and you have these:\n" +
+                        await user_obj.send(f"🎯 {user_name} updated their cards and you want these:\n" +
                                             ", ".join(card.title() for card in matching))
                     except discord.Forbidden:
                         pass
