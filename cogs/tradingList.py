@@ -27,7 +27,8 @@ class cardsCog(commands.Cog):
             self.write_cards(new_cards, sheet, user_row)
             await ctx.send(self.dict[ctx.invoked_with][0]) # Confirmation message
             sheet_looking = connection_excel.worksheet("Looking_For")
-            await self.notify_users_who_want_your_cards(user_name, user_row, sheet_looking)
+            row_data = existing_rows[user_row - 1]
+            await self.notify_users_who_want_your_cards(user_name, row_data, sheet_looking)
         except Exception as e:
             await ctx.send(f"Error: {e}")
 
@@ -91,8 +92,9 @@ class cardsCog(commands.Cog):
             await ctx.send(self.dict[ctx.invoked_with][0])
 
             sheet_looking = connection_excel.worksheet("Looking_For")
-            await self.notify_users_who_want_your_cards(user_name, sheet, sheet_looking)
-            
+            row_data = existing_rows[user_row - 1]
+            await self.notify_users_who_want_your_cards(user_name, row_data, sheet_looking)
+
         except Exception as e:
             await ctx.send(f"Error: {e}")
 
