@@ -175,6 +175,12 @@ class cardsCog(commands.Cog):
         result = await self.find_trades_for_user(ctx.author.name, sheet_looking, sheet_trade)
         await ctx.send(result)
 
+    @commands.command(name="sheet",
+                    help="Sends the link to the sheet.",
+                    brief="Utility")
+    async def sheet(self, ctx):
+        await ctx.send("https://docs.google.com/spreadsheets/d/1g75DSi6pAPlKqRjg5AliNq7DU2b8MNNcr3y4T9_pj_4/edit?usp=sharing")
+
 
 
     async def channel_check(self, ctx):
