@@ -1,0 +1,85 @@
+import websockets
+import requests
+import asyncio
+import json
+import re
+import logging
+import os
+from dotenv import load_dotenv
+
+logging.basicConfig(level=logging.INFO)
+load_dotenv()
+user, password = os.getenv("PS_BOT_USERNAME"), os.getenv("PS_BOT_PASSWORD")
+
+command_responses = {
+    "test": "Comando de testeo!",
+    "ping": "Pong... Is that what you wanted?",
+    "help": "Hola tio."
+}
+
+def login(challstr):
+    """Fonction pour se connecter au serveur Pokémon Showdown"""
+    url = 'http://play.pokemonshowdown.com/api/login'
+    params = {
+        'act': 'login',
+        'name': user,
+        'pass': password,
+        'challstr': challstr
+    }
+
+    print('Connexion en curso...')
+    r = requests.post(url, data=params, timeout=5)
+    print('Réponse reçue:', r.text)
+    response = json.loads(r.text[1:])
+    print('Réponse JSON:', response)
+    nonce = response['assertion']
+    return nonce
+
+def normalize_username(username):
+    return re.sub(r'[^a-zA-Z0-9]', '', username).lower().strip()
+
+async def handle_command(command, websocket, room, username):
+    command = command[1:].strip().lower()    
+    response = command_responses.get(command, "Comando no reconocido.")
+    response = response.replace("{username}", username)
+    await websocket.send(f"{room}|{response}")
+
+async def read_it_all(url):
+    while True:
+        try:
+            async with websockets.connect(url) as websocket:
+                room = None
+                async for message in websocket:
+                    if message.startswith('|challstr|'):
+                        message = message[10:]
+                        nonce = login(message)
+                        await websocket.send(f'|/trn {user},0,{nonce}')
+                    elif message.startswith('|updateuser|'):
+                        if "guest" not in message.lower():
+                            await websocket.send('|/status Test status')
+                            await websocket.send('|/j eventos')
+                    elif message.startswith('>'):
+                        room = message.split('\n')[0][1:]
+                        message = '\n'.join(message.split('\n')[1:])
+                        parts = message.split('|')
+                        if len(parts) >= 5:
+                            message_room = room 
+                            username = parts[3]
+                            content = parts[4]
+                            if content.startswith('-'):
+                                if content.strip() == '-':
+                                    continue
+                                await handle_command(content, websocket, message_room, username)
+        except (websockets.exceptions.ConnectionClosed, ConnectionResetError) as e:
+            logging.error(f"Conexion cerrada: {e}. Intentando reconectarse en 5 segundos...")
+            print("Conexion cerrada. Intentando reconectarse en 5 segundos...")
+            await asyncio.sleep(5)
+        except Exception as e:
+            logging.error(f"Error inesperado: {e}")
+            print(f"Error inesperado: {e}")
+            await asyncio.sleep(5)
+
+url = 'wss://sim3.psim.us/showdown/websocket'
+
+if __name__ == "__main__":
+    asyncio.run(read_it_all(url))
