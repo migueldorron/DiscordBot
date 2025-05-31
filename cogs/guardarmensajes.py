@@ -19,7 +19,8 @@ class MessageDownloadCog(commands.Cog):
         await ctx.send("Descargando papu.")
         with open(filename, "w", encoding="utf-8") as file:
             async for message in channel.history(limit=None, oldest_first=True):
-                file.write(f"{message.author}: {message.content}\n")
+                timestamp = message.created_at.strftime("%d-%m-%Y %H:%M:%S")
+                file.write(f"[{timestamp}] {message.author}: {message.content}\n")
         await ctx.send("Canal descargado papu.")
         await ctx.author.send("Descargado papu.", file=discord.File(filename))
 
