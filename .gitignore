@@ -9,6 +9,5 @@ changelog.odt
 databases/__pycache__/
 cogs/__pycache__/
 cogs/query.py
-guardarmensajes.py
 testeo.txt
 error_log.txt
