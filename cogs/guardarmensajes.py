@@ -20,7 +20,7 @@ class MessageDownloadCog(commands.Cog):
         with open(filename, "w", encoding="utf-8") as file:
             async for message in channel.history(limit=None, oldest_first=True):
                 file.write(f"{message.author}: {message.content}\n")
-
+        await ctx.send("Canal descargado papu.")
         await ctx.author.send("Descargado papu.", file=discord.File(filename))
 
 async def setup(bot):
