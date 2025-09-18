@@ -29,6 +29,10 @@ class MiscelaneoCog(commands.Cog):
         argsList= [arg.strip() for arg in args.split(',')]
         for arg in argsList:
             await ctx.send(arg)
+
+    @commands.command()
+    async def testeo(self, ctx):
+            await ctx.send("Testeo de ahora hecho: 1")        
        
 async def setup(bot):
     await bot.add_cog(MiscelaneoCog(bot))
