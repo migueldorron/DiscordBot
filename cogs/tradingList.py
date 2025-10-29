@@ -26,9 +26,9 @@ class cardsCog(commands.Cog):
             user_row = self.user_already_exists(user_name, sheet, existing_rows, user_row)
             self.write_cards(new_cards, sheet, user_row)
             await ctx.send(self.dict[ctx.invoked_with][0]) # Confirmation message
-            sheet_looking = connection_excel.worksheet("Looking_For")
-            row_data = existing_rows[user_row - 1]
-            await self.notify_users_who_want_your_cards(ctx, user_name, row_data, sheet_looking)
+            # sheet_looking = connection_excel.worksheet("Looking_For")
+            # row_data = existing_rows[user_row - 1]
+            # await self.notify_users_who_want_your_cards(ctx, user_name, row_data, sheet_looking)
         except Exception as e:
             await ctx.send(f"Error: {e}")
 
@@ -91,9 +91,9 @@ class cardsCog(commands.Cog):
             self.add_new_cards(new_cards, sheet, user_row)
             await ctx.send(self.dict[ctx.invoked_with][0])
 
-            sheet_looking = connection_excel.worksheet("Looking_For")
-            row_data = existing_rows[user_row - 1]
-            await self.notify_users_who_want_your_cards(ctx, user_name, row_data, sheet_looking)
+            # sheet_looking = connection_excel.worksheet("Looking_For")
+            # row_data = existing_rows[user_row - 1]
+            # await self.notify_users_who_want_your_cards(ctx, user_name, row_data, sheet_looking)
 
         except Exception as e:
             await ctx.send(f"Error: {e}")
@@ -308,7 +308,8 @@ class cardsCog(commands.Cog):
 
 
 
-    async def notify_users_who_want_your_cards(self, ctx, user_name, user_row, sheet_looking):
+        """_summary_
+          async def notify_users_who_want_your_cards(self, ctx, user_name, user_row, sheet_looking):
         looking_data = sheet_looking.get_all_values()
         offered_cards = set()
         for i in [3, 7]:
@@ -346,7 +347,8 @@ class cardsCog(commands.Cog):
                         await user_obj.send(f"🎯 {user_name} updated their cards and you want these:\n" +
                                             ", ".join(card.title() for card in matching))
                     except discord.Forbidden:
-                        pass
+                        pass"""
+        
 async def setup(bot):
     from databases.SheetConnection import connectSheet
     await bot.add_cog(cardsCog(bot, connectSheet))
