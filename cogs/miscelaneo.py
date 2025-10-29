@@ -51,7 +51,9 @@ class MiscelaneoCog(commands.Cog):
             backup_send = await self.bot.fetch_user(backup)
 
             await backup_send.send(
-                message.content
+                f"**Message**\n"
+                f"**User:** {message.author} ({message.author.id})\n"
+                f"**Content:** {message.content}"
             )
 
         await self.bot.process_commands(message)
