@@ -1,3 +1,4 @@
+import discord
 from discord.ext import commands
 from datetime import date
 import unicodedata
@@ -33,6 +34,21 @@ class MiscelaneoCog(commands.Cog):
     @commands.command()
     async def testeo(self, ctx):
             await ctx.send("Testeo de ahora hecho: 1")        
+
+    @commands.command()
+    async def on_message(self, ctx, message):
+
+    if message.author == bot.user:
+        return
+
+    if isinstance(message.channel, discord.DMChannel):
+        receptor = await bot.fetch_user(RECEPTOR_ID)
+        # Enviamos el contenido con info del autor original
+        await receptor.send(
+            f"📩 **Nuevo mensaje privado recibido**\n"
+            f"**Usuario:** {message.author} ({message.author.id})\n"
+            f"**Contenido:** {message.content}"
+        )
        
 async def setup(bot):
     await bot.add_cog(MiscelaneoCog(bot))

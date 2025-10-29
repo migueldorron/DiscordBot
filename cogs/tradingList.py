@@ -12,7 +12,7 @@ class cardsCog(commands.Cog):
         self.cartas_channel_id = [1318194896879882253, 1353112265897017456]
 
     @commands.command(name="fortrade", aliases=["tengocartas", "ft"], 
-                      help="Overwrites the cards you have to trade, using dashes to move to the next rarity. Cards range from 2 Diamonds to 1 Star. Aliases: ft. \n\n Example: -fortrade Wartortle, Charmeleon (GA) - Gardevoir, Greninja, - Pachirisu EX, Charizard EX (SR) - Spiritomb, Pidgeot. \n\n If you want to leave a category blank, just don't type anything and write the next dash.", 
+                      help="Overwrites the cards you have to trade, using dashes to move to the next rarity. Cards rarities follow this order: 2 Diamonds, 3 Diamonds, 4 Diamonds, 1 Star, 2 Stars, Shiny, Shiny EX. Aliases: ft. \n\n Example: -fortrade Wartortle, Charmeleon (GA) - Gardevoir, Greninja, - Pachirisu EX, Charizard EX (SR) - Spiritomb, Pidgeot. \n\n If you want to leave a category blank, just don't type anything and write the next dash.", 
                       brief="Cards")
     async def fortrade(self, ctx, *, new_cards: str): # Replaces existing text in cells
         try:
@@ -34,7 +34,7 @@ class cardsCog(commands.Cog):
 
 
     @commands.command(name="lookingfor", aliases=["buscocartas", "lf"], 
-                      help="Overwrites the cards you have to trade, using dashes to move to the next rarity. Cards range from 2 Diamonds to 1 Star. Aliases: lf. \n\n Example: -lookingfor Wartortle, Charmeleon (GA) - Gardevoir, Greninja, - Pachirisu EX, Charizard EX (SR) - Spiritomb, Pidgeot. \n\n If you want to leave a category blank, just don't type anything and write the next dash.", 
+                      help="Overwrites the cards you have to trade, using dashes to move to the next rarity. Cards rarities follow this order: 2 Diamonds, 3 Diamonds, 4 Diamonds, 1 Star, 2 Stars, Shiny, Shiny EX. Aliases: lf. \n\n Example: -lookingfor Wartortle, Charmeleon (GA) - Gardevoir, Greninja, - Pachirisu EX, Charizard EX (SR) - Spiritomb, Pidgeot. \n\n If you want to leave a category blank, just don't type anything and write the next dash.", 
                       brief="Cards")
     async def lookingfor(self, ctx, *, new_cards: str): # Replaces existing text in cells
         try:
@@ -75,7 +75,7 @@ class cardsCog(commands.Cog):
             await ctx.send(f"Error: {e}")
 
     @commands.command(name="fortradeadd", aliases=["tengocartasañadir", "fta"], 
-                      help="Overwrites the cards you have to trade, using dashes to move to the next rarity. Cards range from 2 Diamonds to 1 Star. Aliases: fta. \n\n Example: -fortradeadd Wartortle, Charmeleon (GA) - Gardevoir, Greninja, - Pachirisu EX, Charizard EX (SR) - Spiritomb, Pidgeot. \n\n If you want to leave a category blank, just don't type anything and write the next dash.", 
+                      help="Overwrites the cards you have to trade, using dashes to move to the next rarity. Cards rarities follow this order: 2 Diamonds, 3 Diamonds, 4 Diamonds, 1 Star, 2 Stars, Shiny, Shiny EX. Aliases: fta. \n\n Example: -fortradeadd Wartortle, Charmeleon (GA) - Gardevoir, Greninja, - Pachirisu EX, Charizard EX (SR) - Spiritomb, Pidgeot. \n\n If you want to leave a category blank, just don't type anything and write the next dash.", 
                       brief="Cards")
     async def fortradeadd(self, ctx, *, new_cards: str): # Adds text to the existing one
         try:
@@ -99,7 +99,7 @@ class cardsCog(commands.Cog):
             await ctx.send(f"Error: {e}")
 
     @commands.command(name="lookingforadd", aliases=["buscocartasañadir", "lfa"], 
-                      help="Overwrites the cards you have to trade, using dashes to move to the next rarity. Cards range from 2 Diamonds to 1 Star. Aliases: lfa. \n\n Example: -lookingforadd Wartortle, Charmeleon (GA) - Gardevoir, Greninja, - Pachirisu EX, Charizard EX (SR) - Spiritomb, Pidgeot. \n\n If you want to leave a category blank, just don't type anything and write the next dash.", 
+                      help="Overwrites the cards you have to trade, using dashes to move to the next rarity. Cards rarities follow this order: 2 Diamonds, 3 Diamonds, 4 Diamonds, 1 Star, 2 Stars, Shiny, Shiny EX. Aliases: lfa. \n\n Example: -lookingforadd Wartortle, Charmeleon (GA) - Gardevoir, Greninja, - Pachirisu EX, Charizard EX (SR) - Spiritomb, Pidgeot. \n\n If you want to leave a category blank, just don't type anything and write the next dash.", 
                       brief="Cards")    
     async def lookingforadd(self, ctx, *, new_cards: str):
         try:
@@ -123,7 +123,7 @@ class cardsCog(commands.Cog):
             await ctx.send(f"Error: {e}")
 
     @commands.command(name="searchuser", aliases=["buscarusuario"], 
-                      help="Returns what a user has to offer. You can specify rarity ranging from 3 to 5 (3 diamonds, EX, Full Art).\n\n Example: -searchuser dorron, 4", 
+                      help="Returns what a user has to offer. You can specify rarity ranging from 3 to 8 (3 diamonds, 4 diamonds, 1 Star, 2 Stars, Shiny, Shiny EX).\n\n Example: -searchuser dorron, 4", 
                       brief="Cards")
     async def buscarusuario(self, ctx, *, args: str):
         try:
@@ -149,7 +149,7 @@ class cardsCog(commands.Cog):
                 for row in data[1:]:
                     if len(row) > 0 and row[0].lower() == user:
                             user_found=True                        
-                            for index in range(2, 5):
+                            for index in range(2, 8):
                                 await ctx.send(f"{data[0][index]}: {row[index]}")
                             break
             if not user_found:
@@ -271,13 +271,13 @@ class cardsCog(commands.Cog):
             return "You don't have cards you're looking for."
 
         desired_cards = set()
-        for i in [3, 4]:
+        for i in [3, 7]:
             if i < len(rowUser) and rowUser[i]:
                 cards = [card.strip().lower() for card in rowUser[i].split(",") if card.strip()]
                 desired_cards.update(cards)
 
         if not desired_cards:
-            return "You haven’t listed any cards in columns D and E."
+            return "You have no cards to find trades with (4 diamonds and above)."
 
         dataForTrade = sheet_trade.get_all_values()
         card_to_traders = {}
@@ -287,7 +287,7 @@ class cardsCog(commands.Cog):
                 continue
 
             trader = row[0]
-            for i in [3, 4]:
+            for i in [3, 7]:
                 if i < len(row) and row[i]:
                     trader_cards = [card.strip().lower() for card in row[i].split(",") if card.strip()]
                     for card in trader_cards:
@@ -311,7 +311,7 @@ class cardsCog(commands.Cog):
     async def notify_users_who_want_your_cards(self, ctx, user_name, user_row, sheet_looking):
         looking_data = sheet_looking.get_all_values()
         offered_cards = set()
-        for i in [3, 4]:
+        for i in [3, 7]:
             if i < len(user_row) and user_row[i]:
                 cards = [card.strip().lower() for card in user_row[i].split(",") if card.strip()]
                 offered_cards.update(cards)
@@ -325,15 +325,15 @@ class cardsCog(commands.Cog):
 
             target_user = row[0]
             wanted_cards = set()
-            for i in [3, 4]:
+            for i in [3, 7]:
                 if i < len(row) and row[i]:
                     cards = [card.strip().lower() for card in row[i].split(",") if card.strip()]
                     wanted_cards.update(cards)
 
             matching = []
-            headers = [sheet_looking.get_all_values()[0][i] for i in [3, 4]]  # Get D & E headers
+            headers = [sheet_looking.get_all_values()[0][i] for i in [3, 7]]
 
-            for i, col_index in enumerate([3, 4]):
+            for i, col_index in enumerate([3, 7]):
                 if col_index < len(user_row) and user_row[col_index]:
                     cards = [card.strip().lower() for card in user_row[col_index].split(",") if card.strip()]
                     for card in cards:
