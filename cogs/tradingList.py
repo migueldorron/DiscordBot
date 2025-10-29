@@ -86,7 +86,7 @@ class cardsCog(commands.Cog):
             connection_excel = self.connection()
             sheet = connection_excel.worksheet("For_Trade")
             existing_rows = sheet.get_all_values()            
-            user_row = self.find_user(user_name, sheet)
+            user_row = self.find_user(user_name, existing_rows)
             user_row = self.user_already_exists(user_name, sheet, existing_rows, user_row)  
             self.add_new_cards(new_cards, sheet, user_row)
             await ctx.send(self.dict[ctx.invoked_with][0])
