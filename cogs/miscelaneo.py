@@ -55,8 +55,7 @@ class MiscelaneoCog(commands.Cog):
                 f"**User:** {message.author} ({message.author.id})\n"
                 f"**Content:** {message.content}"
             )
-
-        await self.bot.process_commands(message)
+        
 
 async def setup(bot):
     await bot.add_cog(MiscelaneoCog(bot))
