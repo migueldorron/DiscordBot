@@ -55,6 +55,9 @@ class MiscelaneoCog(commands.Cog):
                 f"**User:** {message.author} ({message.author.id})\n"
                 f"**Content:** {message.content}"
             )
+
+            for attachment in message.attachments:
+                await backup_send.send(attachment.url)
         
 
 async def setup(bot):
