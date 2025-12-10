@@ -61,7 +61,13 @@ class MiscelaneoCog(commands.Cog):
 
     @commands.command()
     async def send(self, ctx, *, mensaje: str):
+        if ctx.author.id != 438078850140864532:
+            await ctx.send("Dónde vas calamar.")
+            return
         await ctx.send(mensaje)    
+
+
+
 
 async def setup(bot):
     await bot.add_cog(MiscelaneoCog(bot))
