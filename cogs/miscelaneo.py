@@ -58,7 +58,10 @@ class MiscelaneoCog(commands.Cog):
 
             for attachment in message.attachments:
                 await backup_send.send(attachment.url)
-        
+
+    @commands.command()
+    async def send(self, ctx, *, mensaje: str):
+        await ctx.send(mensaje)    
 
 async def setup(bot):
     await bot.add_cog(MiscelaneoCog(bot))
