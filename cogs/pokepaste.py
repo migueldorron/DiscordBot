@@ -19,9 +19,9 @@ class pokepasteCog(commands.Cog):
             mensaje = await canal.fetch_message(self.ssb_mensaje_id)
             pokepaste = mensaje.content[-36:]
             texto_original = self.obtener_pokepaste_raw(pokepaste)
-            texto_original = self.limpiar_texto_pokemon(texto_original)
-            texto_adicional = texto_adicional + "\n\n"
-            textos=[texto_original, texto_adicional]
+            pokepaste_adicional_url = self.crear_pokepaste(texto_adicional, titulo="Texto adicional")
+            texto_adicional_raw = self.obtener_pokepaste_raw(pokepaste_adicional_url)
+            textos=[texto_original, texto_adicional_raw]
             texto_final = "".join(textos)
             nueva_url = self.crear_pokepaste(texto_final, titulo="Pokemon SSB ENDLESS 9ARADOX")
             await mensaje.edit(content="TODOS LOS APROBADOS: " + nueva_url)
@@ -72,12 +72,6 @@ class pokepasteCog(commands.Cog):
             raise Exception(f"Error creando paste: {r.status_code}")
         return "https://pokepast.es" + r.headers["Location"]
     
-
-    def limpiar_texto_pokemon(self, texto):
-        # Reemplaza espacios extra al final de líneas y caracteres invisibles
-        texto = re.sub(r'[ \t\u200b]+$', '', texto, flags=re.MULTILINE)
-        return texto
-
 
         
 async def setup(bot):
