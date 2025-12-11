@@ -22,7 +22,7 @@ class pokepasteCog(commands.Cog):
             pokepaste_adicional_url = self.crear_pokepaste(texto_adicional, titulo="Texto adicional")
             texto_adicional_raw = self.obtener_pokepaste_raw(pokepaste_adicional_url)
             textos=[texto_original, texto_adicional_raw]
-            texto_final = "".join(textos)
+            texto_final = "\n\n".join(textos)
             nueva_url = self.crear_pokepaste(texto_final, titulo="Pokemon SSB ENDLESS 9ARADOX")
             await mensaje.edit(content="TODOS LOS APROBADOS: " + nueva_url)
             await ctx.send(f"Mensaje actualizado correctamente: {nueva_url}")
