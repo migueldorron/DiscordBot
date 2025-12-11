@@ -73,7 +73,7 @@ class pokepasteCog(commands.Cog):
         return "https://pokepast.es" + r.headers["Location"]
     
 
-    def limpiar_texto_pokemon(texto):
+    def limpiar_texto_pokemon(self, texto):
         # Reemplaza espacios extra al final de líneas y caracteres invisibles
         texto = re.sub(r'[ \t\u200b]+$', '', texto, flags=re.MULTILINE)
         return texto
