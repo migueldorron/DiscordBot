@@ -19,10 +19,13 @@ class pokepasteCog(commands.Cog):
             mensaje = await canal.fetch_message(self.ssb_mensaje_id)
             pokepaste = mensaje.content[-36:]
             texto_original = self.obtener_pokepaste_raw(pokepaste)
+
             pokepaste_adicional_url = self.crear_pokepaste(texto_adicional, titulo="Texto adicional")
             texto_adicional_raw = self.obtener_pokepaste_raw(pokepaste_adicional_url)
+
             textos=[texto_original, texto_adicional_raw]
             texto_final = "\n\n".join(textos)
+
             nueva_url = self.crear_pokepaste(texto_final, titulo="Pokemon SSB ENDLESS 9ARADOX")
             await mensaje.edit(content="TODOS LOS APROBADOS: " + nueva_url)
             await ctx.send(f"Mensaje actualizado correctamente: {nueva_url}")
@@ -41,6 +44,7 @@ class pokepasteCog(commands.Cog):
                 url_final = f"https://pokepast.es/{match.group(1)}"
             else:
                 url_final = self.crear_pokepaste(nuevo_contenido, titulo="Pokemon SSB ENDLESS 9ARADOX")
+
             await mensaje.edit(content="TODOS LOS APROBADOS: " + url_final)
             await ctx.send(f"Mensaje actualizado correctamente: {url_final}")
 
@@ -59,6 +63,7 @@ class pokepasteCog(commands.Cog):
         return r.text
     
     def crear_pokepaste(self, texto, titulo):
+        texto = texto.replace("\n", "\r\n")
         url = "https://pokepast.es/create"
         data = {"paste": texto, "title": titulo}
         headers = {
@@ -73,7 +78,6 @@ class pokepasteCog(commands.Cog):
         return "https://pokepast.es" + r.headers["Location"]
     
 
-        
 async def setup(bot):
     from databases.SheetConnection import connectSheet
     await bot.add_cog(pokepasteCog(bot, connectSheet))
