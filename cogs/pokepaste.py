@@ -27,7 +27,7 @@ class pokepasteCog(commands.Cog):
 
             url_nuevo = f"https://pokepast.es/{match.group(1)}"
             texto_nuevo = self.obtener_pokepaste_raw(url_nuevo)
-            texto_final = "\n\n".join([texto_original, texto_nuevo])
+            texto_final = "".join([texto_original, texto_nuevo])
             nueva_url = self.crear_pokepaste(
                 texto_final,
                 titulo="Pokemon SSB ENDLESS 9ARADOX"
