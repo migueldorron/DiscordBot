@@ -13,25 +13,32 @@ class pokepasteCog(commands.Cog):
         self.ssb_mensaje_id = 1448442459246952538
 
     @commands.command()
-    async def aprobado(self, ctx, *, texto_adicional: str):
+    async def aprobado(self, ctx, pokepaste_nuevo: str):
         try:
             canal = self.bot.get_channel(self.ssb_channel_id)
             mensaje = await canal.fetch_message(self.ssb_mensaje_id)
-            pokepaste = mensaje.content[-36:]
-            texto_original = self.obtener_pokepaste_raw(pokepaste)
 
-            pokepaste_adicional_url = self.crear_pokepaste(texto_adicional, titulo="Texto adicional")
-            texto_adicional_raw = self.obtener_pokepaste_raw(pokepaste_adicional_url)
+            pokepaste_original = mensaje.content[-36:]
+            texto_original = self.obtener_pokepaste_raw(pokepaste_original)
 
-            textos=[texto_original, texto_adicional_raw]
-            texto_final = "\n\n".join(textos)
+            match = re.search(r"https?://pokepast\.es/([a-z0-9]{16})", pokepaste_nuevo)
+            if not match:
+                raise Exception("El argumento no es un Poképaste válido")
 
-            nueva_url = self.crear_pokepaste(texto_final, titulo="Pokemon SSB ENDLESS 9ARADOX")
+            url_nuevo = f"https://pokepast.es/{match.group(1)}"
+            texto_nuevo = self.obtener_pokepaste_raw(url_nuevo)
+            texto_final = "\n\n".join([texto_original, texto_nuevo])
+            nueva_url = self.crear_pokepaste(
+                texto_final,
+                titulo="Pokemon SSB ENDLESS 9ARADOX"
+            )
+
             await mensaje.edit(content="TODOS LOS APROBADOS: " + nueva_url)
             await ctx.send(f"Mensaje actualizado correctamente: {nueva_url}")
 
         except Exception as e:
             await ctx.send(f"Hubo un error: {e}")
+
 
     @commands.command()
     async def setpokepaste(self, ctx, *, nuevo_contenido: str):
