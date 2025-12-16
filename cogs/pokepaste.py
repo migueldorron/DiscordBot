@@ -70,7 +70,6 @@ class pokepasteCog(commands.Cog):
         return r.text
     
     def crear_pokepaste(self, texto, titulo):
-        texto = texto.replace("\n", "\r\n")
         url = "https://pokepast.es/create"
         data = {"paste": texto, "title": titulo}
         headers = {
