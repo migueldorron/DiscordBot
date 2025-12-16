@@ -14,7 +14,7 @@ class MessageDownloadCog(commands.Cog):
             await ctx.send("Dónde vas calamar.")
             return
         
-        filename="chat.txt"
+        filename=f"{channel.name}.txt"
 
         await ctx.send("Descargando papu.")
         with open(filename, "w", encoding="utf-8") as file:
