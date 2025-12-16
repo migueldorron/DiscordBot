@@ -60,7 +60,7 @@ class pokepasteCog(commands.Cog):
 
 
     @commands.command()
-    async def mensajeSSB(self, ctx, mensaje: str):
+    async def mensajeSSB(self, ctx, *, mensaje: str):
         try:
             canal = self.bot.get_channel(self.ssb_channel_id)
             await canal.send(mensaje)
