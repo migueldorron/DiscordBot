@@ -59,6 +59,15 @@ class pokepasteCog(commands.Cog):
             await ctx.send(f"Hubo un error al editar el mensaje: {e}")
 
 
+    @commands.command()
+    async def mensajeSSB(self, ctx, mensaje: str):
+        try:
+            canal = self.bot.get_channel(self.ssb_channel_id)
+            await canal.send(mensaje)
+
+        except Exception as e:
+            await ctx.send(f"Hubo un error: {e}")
+
     def obtener_pokepaste_raw(self, url):
         if not url.endswith("/raw"):
             url_raw = url + "/raw" if not url.endswith("/") else url + "raw"
