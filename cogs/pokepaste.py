@@ -62,7 +62,7 @@ class pokepasteCog(commands.Cog):
     @commands.command()
     async def mensajeSSB(self, ctx, *, mensaje: str):
         try:
-            if ctx.author.id != 438078850140864532:
+            if ctx.author.id != 438078850140864532 and ctx.author.id!=257252090642956288:
                 await ctx.send("Dónde vas calamar.")
                 return
             canal = self.bot.get_channel(self.ssb_channel_id)
