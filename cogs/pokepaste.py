@@ -72,11 +72,11 @@ class pokepasteCog(commands.Cog):
             await ctx.send(f"Hubo un error: {e}")
 
     @commands.command()
-    async def lista(self, ctx, *, mensaje: str):
+    async def lista(self, ctx,):
         try:
             canal = self.bot.get_channel(self.ssb_channel_id)
             mensaje = await canal.fetch_message(self.ssb_mensaje_id)
-            await ctx.send(mensaje)
+            await ctx.send(mensaje.content)
 
         except Exception as e:
             await ctx.send(f"Hubo un error: {e}")
