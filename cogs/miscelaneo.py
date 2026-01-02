@@ -70,18 +70,18 @@ class MiscelaneoCog(commands.Cog):
     async def ordenarjson(self, ctx, *, json_texto):
         try:
             datos=json.loads(json_texto)
-            ctx.send("1")
+            await ctx.send("1")
             if not isinstance(datos, dict):
                 await ctx.send("Not a JSON.")
                 return
             
-            ctx.send("2")
+            await ctx.send("2")
             
             json_ordenado = dict(
-                sorted(json.items(), key=lambda item: item[1], reverse=True)
+                sorted(datos.items(), key=lambda item: item[1], reverse=True)
                 )
             
-            ctx.send("3")
+            await ctx.send("3")
            
             await ctx.send(f"```json\n{json.dumps(json_ordenado, indent=2)}\n```")
 
