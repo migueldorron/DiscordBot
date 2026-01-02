@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from datetime import date
 import unicodedata
-
+import json
 from dotenv import load_dotenv
 import os
 
@@ -66,8 +66,23 @@ class MiscelaneoCog(commands.Cog):
             return
         await ctx.send(mensaje)    
 
+    @commands.command()
+    async def ordenarjson(self, ctx, *, json_texto):
+        try:
+            datos=json.loads(json_texto)
 
+            if not isinstance(datos, dict):
+                await ctx.send("Not a JSON.")
+                return
+            
+            json_ordenado = dict(
+                sorted(json.items(), key=lambda item: item[1], reverse=True)
+                )
+            
+            await ctx.send(f"```json\n{json.dumps(json_ordenado, indent=2)}\n```")
 
+        except json.JSONDecodeError:
+            await ctx.send("Invalid JSON.")
 
 async def setup(bot):
     await bot.add_cog(MiscelaneoCog(bot))
