@@ -5,6 +5,7 @@ import unicodedata
 import json
 from dotenv import load_dotenv
 import os
+import io
 
 load_dotenv()
 backup = int(os.getenv("SEND_ID"))
@@ -70,20 +71,52 @@ class MiscelaneoCog(commands.Cog):
     async def ordenarjson(self, ctx, *, json_texto):
         try:
             datos=json.loads(json_texto)
-            await ctx.send("1")
+
             if not isinstance(datos, dict):
                 await ctx.send("Not a JSON.")
                 return
-            
-            await ctx.send("2")
-            
+                        
             json_ordenado = dict(
                 sorted(datos.items(), key=lambda item: item[1], reverse=True)
                 )
-            
-            await ctx.send("3")
            
             await ctx.send(f"```json\n{json.dumps(json_ordenado, indent=2)}\n```")
+
+        except json.JSONDecodeError:
+            await ctx.send("Invalid JSON.")
+
+
+    @commands.command()
+    async def ordenarjson(self, ctx, *, json_texto=None):
+        try:
+            if ctx.message.attachments:
+                archivo = ctx.message.attachments[0]
+                contenido = await archivo.read()
+                texto = contenido.decode("utf-8")
+            else:
+                if json_texto is None:
+                    await ctx.send("Send a JSON either by text or attach a .txt file")
+                    return
+                texto = json_texto
+
+            datos = json.loads(texto)
+
+            if not isinstance(datos, dict):
+                await ctx.send("Not a JSON.")
+                return
+
+            json_ordenado = dict(
+                sorted(datos.items(), key=lambda item: item[1], reverse=True)
+            )
+
+            resultado = json.dumps(json_ordenado, indent=2, ensure_ascii=False)
+
+            archivo_salida = io.BytesIO(resultado.encode("utf-8"))
+            archivo_salida.seek(0)
+
+            await ctx.send(
+                file=discord.File(archivo_salida, filename="json.txt")
+            )
 
         except json.JSONDecodeError:
             await ctx.send("Invalid JSON.")
