@@ -27,6 +27,7 @@ class SSBCog(commands.Cog):
                 sumaEquipo+=self.listaPokemon[pokemon][1]
             else:
                 await ctx.send("Uno de los Pokemon no existe. Revisa si has copiado bien el team preview.")
+                return
 
 
 
