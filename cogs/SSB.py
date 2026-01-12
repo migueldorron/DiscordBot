@@ -17,8 +17,8 @@ class SSBCog(commands.Cog):
         """
         nombres = input_pokemon.split(" / ")
 
-        if len(nombres) != 6:
-            await ctx.send("Copiaste mal el team preview")
+        if len(nombres) > 6:
+            await ctx.send("Copiaste mal el team preview. Demasiados elementos.")
             return
 
         sumaEquipo=0
