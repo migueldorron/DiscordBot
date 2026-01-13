@@ -57,9 +57,9 @@ class SSBCog(commands.Cog):
                 await ctx.send("Uno de los Pokemon no existe. Revisa si has copiado bien el team preview.")
                 return
 
-        formatosValidos=[True] * 9
+        formatosValidos=[True] * 10
 
-        for i in range(9):
+        for i in range(10):
             for poke in formatosPoke:
                 if not formatosPoke[poke][i]:
                     formatosValidos[i]=False
