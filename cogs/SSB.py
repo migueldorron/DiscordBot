@@ -12,11 +12,14 @@ class SSBCog(commands.Cog):
     @commands.command()
     async def puntos(self, ctx, *, input_pokemon):
 
-        nombres = input_pokemon.split(" / ")
+        nombres = input_pokemon.split("/")
 
         if len(nombres) > 6:
             await ctx.send("Copiaste mal el team preview. Demasiados elementos.")
             return
+
+        nombres = [nombre.strip() for nombre in nombres]
+
 
         sumaEquipo=0
         rangosEquipo=""
@@ -33,11 +36,13 @@ class SSBCog(commands.Cog):
     @commands.command()
     async def tiers(self, ctx, *, input_pokemon):
 
-        nombres = input_pokemon.split(" / ")
+        nombres = input_pokemon.split("/")
 
         if len(nombres) > 6:
             await ctx.send("Copiaste mal el team preview. Demasiados elementos.")
             return
+        
+        nombres = [nombre.strip() for nombre in nombres]
 
         sumaEquipo=0
         rangosEquipo=""
@@ -73,8 +78,6 @@ Tiers en las que se permite tu equipo: {listaFormatosValidos}""")
         else:
             await ctx.send("Tu equipo no es válido en ninguna tier lol.")
         
-
-
 
 async def setup(bot):
     await bot.add_cog(SSBCog(bot))
