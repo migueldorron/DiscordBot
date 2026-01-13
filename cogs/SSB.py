@@ -1,7 +1,6 @@
 import discord
 import databases.pokesSSB
 from discord.ext import commands
-import os
 
 
 class SSBCog(commands.Cog):
@@ -22,16 +21,16 @@ class SSBCog(commands.Cog):
             return
 
         sumaEquipo=0
+        rangosEquipo=""
         for pokemon in nombres:
             if pokemon in self.listaPokemon:
                 sumaEquipo+=self.listaPokemon[pokemon][1]
+                rangosEquipo+=self.listaPokemon[pokemon][0]+" "
             else:
                 await ctx.send("Uno de los Pokemon no existe. Revisa si has copiado bien el team preview.")
                 return
 
-
-
-        await ctx.send(f"Equipo mandado: {input_pokemon} - Suma de puntos: {sumaEquipo}")
+        await ctx.send(f"Equipo mandado: {input_pokemon} - Rangos: {rangosEquipo} - Suma de puntos: {sumaEquipo}")
 
 async def setup(bot):
     await bot.add_cog(SSBCog(bot))
