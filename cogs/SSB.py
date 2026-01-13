@@ -85,7 +85,7 @@ Tiers en las que se permite tu equipo: {listaFormatosValidos}""")
 
     @commands.command()
     async def listatiers(self, ctx):
-        await ctx.send(self.listatiers)
+        await ctx.send(self.formatos)
 
 
     @commands.command()
@@ -122,7 +122,7 @@ Tiers en las que se permite tu equipo: {listaFormatosValidos}""")
             mensajeFinal=""    
             for rango in dictPermitidos:
                 if dictPermitidos[rango]:
-                   mensajeFinal += rango + ": " + ", ".join(dictPermitidos[rango]) + "\n"
+                   mensajeFinal += rango + ":` " + ", ".join(dictPermitidos[rango]) + "`\n"
             
             await ctx.send(mensajeFinal)
 
