@@ -1,4 +1,5 @@
-{'Absol-Mega-Z': ['A-', 7, True, False, True, True, False, True, True, False, True, True],
+listaPokemon= {
+    'Absol-Mega-Z': ['A-', 7, True, False, True, True, False, True, True, False, True, True],
  'Altaria': ['B-', 4, True, False, True, False, True, False, False, False, True, True],
  'Annihilape': ['B-', 4, True, False, True, True, False, True, False, False, True, True],
  'Arcanine-Hisui': ['B+', 6, True, False, True, True, True, True, True, False, True, False],
