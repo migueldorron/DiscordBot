@@ -54,7 +54,7 @@ class SSBCog(commands.Cog):
                 datos = listaPokemon_lower[pokemon_lower]
                 sumaEquipo += datos[1]
                 rangosEquipo += datos[0] + " "
-                formatosPokeTemporal = datos[2:]  # ya tenemos 'datos', no hace falta buscar otra vez
+                formatosPokeTemporal = datos[2:] 
                 formatosPoke[pokemon] = formatosPokeTemporal
 
             else:
