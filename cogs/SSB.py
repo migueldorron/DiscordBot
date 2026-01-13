@@ -83,22 +83,25 @@ Tiers en las que se permite tu equipo: {listaFormatosValidos}""")
             await ctx.send("Tu equipo no es válido en ninguna tier lol.")
         
 
-    @commands.command
+    @commands.command()
     async def listatiers(self, ctx):
-        ctx.send(self.listatiers)
+        await ctx.send(self.listatiers)
 
 
-    @commands.command
+    @commands.command()
     async def permitidos(self, ctx, tier: str):
 
         tier=tier.lower().replace(" ", "")
         self.formatos=[formato.lower().replace(" ","") for formato in self.formatos]
+
+        indice = None
+
         for i in range(len(self.formatos)):
             if tier==self.formatos[i]:
                 indice=i
                 break
         
-        if indice:
+        if indice is not None:
             dictPermitidos={
                 "S":[],
                 "A+":[],
@@ -116,15 +119,15 @@ Tiers en las que se permite tu equipo: {listaFormatosValidos}""")
             for pokemon in self.listaPokemon:
                 if self.listaPokemon[pokemon][indice+2]:
                     dictPermitidos[self.listaPokemon[pokemon][0]].append(pokemon)
-                    
+            mensajeFinal=""    
             for rango in dictPermitidos:
                 if dictPermitidos[rango]:
                    mensajeFinal += rango + ": " + ", ".join(dictPermitidos[rango]) + "\n"
             
-            ctx.send(mensajeFinal)
+            await ctx.send(mensajeFinal)
 
         else:
-            ctx.send(f"No se encuentra el formato. Aquí están todas las opciones. {self.formatos}")
+            await ctx.send(f"No se encuentra el formato. Aquí están todas las opciones. {self.formatos}")
 
 
 async def setup(bot):
