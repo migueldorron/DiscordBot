@@ -66,9 +66,10 @@ class SSBCog(commands.Cog):
                 listaFormatosValidos.append(self.formatos[i])
 
         if listaFormatosValidos:
-            await ctx.send(f"""Rangos: {rangosEquipo} \n
-                           Suma de puntos: {sumaEquipo} \n
-                           Tiers en las que se permite tu equipo: {listaFormatosValidos}""")
+            await ctx.send(f"""Rangos: {rangosEquipo}
+Suma de puntos: {sumaEquipo}
+Tiers en las que se permite tu equipo: {listaFormatosValidos}""")
+            
         else:
             await ctx.send("Tu equipo no es válido en ninguna tier lol.")
         
