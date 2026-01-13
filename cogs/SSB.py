@@ -12,21 +12,22 @@ class SSBCog(commands.Cog):
     @commands.command()
     async def puntos(self, ctx, *, input_pokemon):
 
-        nombres = input_pokemon.split("/")
+        nombres = [nombre.strip() for nombre in input_pokemon.split("/")]
 
         if len(nombres) > 6:
             await ctx.send("Copiaste mal el team preview. Demasiados elementos.")
             return
-
-        nombres = [nombre.strip() for nombre in nombres]
-
-
+        
+        listaPokemon_lower = {k.lower(): v for k, v in self.listaPokemon.items()}
         sumaEquipo=0
         rangosEquipo=""
+
         for pokemon in nombres:
-            if pokemon in self.listaPokemon:
-                sumaEquipo+=self.listaPokemon[pokemon][1]
-                rangosEquipo+=self.listaPokemon[pokemon][0]+" "
+            pokemon_lower=pokemon.lower()
+            if pokemon_lower in listaPokemon_lower:
+                datos = listaPokemon_lower[pokemon_lower]
+                sumaEquipo += datos[1]
+                rangosEquipo += datos[0] + " "
             else:
                 await ctx.send("Uno de los Pokemon no existe. Revisa si has copiado bien el team preview.")
                 return
@@ -36,23 +37,26 @@ class SSBCog(commands.Cog):
     @commands.command()
     async def tiers(self, ctx, *, input_pokemon):
 
-        nombres = input_pokemon.split("/")
+        nombres = [nombre.strip() for nombre in input_pokemon.split("/")]
 
         if len(nombres) > 6:
             await ctx.send("Copiaste mal el team preview. Demasiados elementos.")
             return
         
-        nombres = [nombre.strip() for nombre in nombres]
-
+        listaPokemon_lower = {k.lower(): v for k, v in self.listaPokemon.items()}
         sumaEquipo=0
         rangosEquipo=""
         formatosPoke={}
+
         for pokemon in nombres:
-            if pokemon in self.listaPokemon:
-                sumaEquipo+=self.listaPokemon[pokemon][1]
-                rangosEquipo+=self.listaPokemon[pokemon][0]+" "
-                formatosPokeTemporal=self.listaPokemon[pokemon][2:]
-                formatosPoke[pokemon]=formatosPokeTemporal
+            pokemon_lower=pokemon.lower()
+            if pokemon_lower in listaPokemon_lower:
+                datos = listaPokemon_lower[pokemon_lower]
+                sumaEquipo += datos[1]
+                rangosEquipo += datos[0] + " "
+                formatosPokeTemporal = datos[2:]  # ya tenemos 'datos', no hace falta buscar otra vez
+                formatosPoke[pokemon] = formatosPokeTemporal
+
             else:
                 await ctx.send("Uno de los Pokemon no existe. Revisa si has copiado bien el team preview.")
                 return
