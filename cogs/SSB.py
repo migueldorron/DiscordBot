@@ -30,7 +30,7 @@ class SSBCog(commands.Cog):
                 await ctx.send("Uno de los Pokemon no existe. Revisa si has copiado bien el team preview.")
                 return
 
-        await ctx.send(f"Equipo mandado: {input_pokemon} - Rangos: {rangosEquipo} - Suma de puntos: {sumaEquipo}")
+        await ctx.send(f"Equipo mandado: {input_pokemon} \n Rangos: {rangosEquipo} \n Suma de puntos: {sumaEquipo}")
 
 async def setup(bot):
     await bot.add_cog(SSBCog(bot))
