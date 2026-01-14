@@ -1,16 +1,7 @@
 import discord
 from discord.ext import commands
-from datetime import date
-import unicodedata
-import json
-from dotenv import load_dotenv
-import os
-import io
 
-load_dotenv()
-backup = int(os.getenv("SEND_ID"))
 
-#Different commands I tried using while I was learning both Python and the Discord library. Uploaded just for information purposes.
 class ModCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
