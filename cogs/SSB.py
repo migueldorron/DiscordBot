@@ -103,17 +103,17 @@ Tiers en las que se permite tu equipo: {listaFormatosValidos}""")
         
         if indice is not None:
             dictPermitidos={
-                "S (10)":[],
-                "A+ (9)":[],
-                "A (8)":[],
-                "A- (7)":[],
-                "B+ (6)":[],
-                "B (5)":[],
-                "B- (4)":[],
-                "C+ (3)":[],
-                "C (2)":[],
-                "C- (1)":[],
-                "D (0)":[]
+                "S":[],
+                "A+":[],
+                "A":[],
+                "A-":[],
+                "B+":[],
+                "B":[],
+                "B-":[],
+                "C+":[],
+                "C":[],
+                "C-":[],
+                "D":[]
             }
 
             for pokemon in self.listaPokemon:
