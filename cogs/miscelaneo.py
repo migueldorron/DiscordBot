@@ -16,6 +16,7 @@ class MiscelaneoCog(commands.Cog):
         self.bot = bot
         self.cartas_message_id = 1330148084952465429
         self.cartas_channel_id = 1318194896879882253
+        self.awards_channel_id = 1463153281475022972
         
     @commands.command()
     async def editarmensaje(self, ctx, *, texto:str):
@@ -42,7 +43,7 @@ class MiscelaneoCog(commands.Cog):
     async def testeo(self, ctx):
             await ctx.send("Testeo de ahora hecho: 1")        
 
-    @commands.Cog.listener()
+    """@commands.Cog.listener()
     async def on_message(self, message):
 
         if message.author == self.bot.user or message.author.id==backup:
@@ -58,7 +59,7 @@ class MiscelaneoCog(commands.Cog):
             )
 
             for attachment in message.attachments:
-                await backup_send.send(attachment.url)
+                await backup_send.send(attachment.url)"""
 
     @commands.command()
     async def send(self, ctx, *, mensaje: str):
@@ -120,6 +121,22 @@ class MiscelaneoCog(commands.Cog):
 
         except json.JSONDecodeError:
             await ctx.send("Invalid JSON.")
+
+
+    @commands.command()
+    async def mandarcategoria(self, ctx, *, categoria: str):
+        try:
+            canal = self.bot.get_channel(self.awards_channel_id)
+
+            if canal is None:
+                await ctx.send("No se pudo encontrar el canal de destino. Menciona a Dorron para que lo solucione.")
+                return
+
+            await canal.send(f"Sugerencia de <@{ctx.author.id}>: {categoria}")
+            await ctx.send("Mensaje enviado.")
+
+        except Exception as e:
+            await ctx.send(f"Error: {e}")
 
 async def setup(bot):
     await bot.add_cog(MiscelaneoCog(bot))
