@@ -1,7 +1,7 @@
 listaPokemon= {
     "Absol-Mega-Z": ["A-", 7, True, False, True, True, False, True, True, False, True, True],
  "Altaria": ["B-", 4, True, False, True, False, True, True, False, False, True, True],
- "Annihilape": ["c+", 3, True, False, True, True, True, True, False, False, True, True],
+ "Annihilape": ["C+", 3, True, False, True, True, True, True, False, False, True, True],
  "Arcanine-Hisui": ["B+", 6, True, False, True, True, True, True, True, False, True, False],
  "Articuno": ["C+", 3, True, False, False, False, True, True, False, False, True, True],
  "Astrolotl": ["C", 2, False, False, True, False, False, True, True, True, False, True],
