@@ -34,7 +34,6 @@ class SSBCog(commands.Cog):
 
             await ctx.send(f"Rangos: {rangosEquipo} \nSuma de puntos: {sumaEquipo}")
 
-            
         except Exception as e:
             await ctx.send(f"Error: {e}")
 
