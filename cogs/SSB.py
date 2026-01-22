@@ -214,7 +214,7 @@ class SSBCog(commands.Cog):
         return url_pokepaste
 
 
-    async def obtener_texto_pokepaste(url, session: aiohttp.ClientSession):
+    async def obtener_texto_pokepaste(self, url, session: aiohttp.ClientSession):
         headers = {"User-Agent": "Mozilla/5.0"}
         async with session.get(url, headers=headers) as resp:
             if resp.status != 200:
