@@ -84,8 +84,8 @@ class SSBCog(commands.Cog):
 
             if listaFormatosValidos:
                 await ctx.send(f"""Rangos: {rangosEquipo}
-    Suma de puntos: {sumaEquipo}
-    Tiers en las que se permite tu equipo: {listaFormatosValidos}""")
+Suma de puntos: {sumaEquipo}
+Tiers en las que se permite tu equipo: {listaFormatosValidos}""")
                 
             else:
                 await ctx.send("Tu equipo no es válido en ninguna tier lol.")
@@ -157,15 +157,21 @@ class SSBCog(commands.Cog):
 
 
             lista_pokepastes=[]
+            puntos=0
+            tiers=[]
             for pokemon in nombres:
                 pokemon_lower=pokemon.lower()
                 if pokemon_lower in listaPokemon_lower:
                     texto_pokepaste=await self.obtener_texto_pokepaste(listaPokemon_lower[pokemon_lower][12], self.session)
                     lista_pokepastes.append(texto_pokepaste)
+                    puntos+=listaPokemon_lower[pokemon_lower][1]
+                    tiers.append(listaPokemon_lower[pokemon_lower][0])
             
             paste_final= await self.fusionarpastes(lista_pokepastes)
 
-            await ctx.send(f"Equipo final: {paste_final}")
+            await ctx.send(f"""Equipo final: {paste_final}
+                           Tiers: {tiers}
+                           Puntos: {puntos}""")
 
         except Exception as e:
             await ctx.send(f"Error: {e}")
