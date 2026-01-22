@@ -21,7 +21,7 @@ listaPokemon= {
  "Deoxys-Speed": ["B+", 6, False, True, True, False, False, True, True, False, True, True, "https://pokepast.es/3b2c98ae00f746ab/raw"],
  "Dondozo": ["C", 2, True, True, True, False, False, True, False, False, True, False, "https://pokepast.es/414b0353cb9ee3a6/raw"],
  "Dragalge-Mega": ["A", 8, True, True, False, False, True, True, False, True, False, False, "https://pokepast.es/81e350b167a45845/raw"],
- "Dragapult": ["B+", 6, True, False, True, True, True, True, True, True, False, True, "https://pokepast.es/d10bfbe4f7fed946/raw"],
+ "Dragapult": ["B+", 6, True, False, True, True, True, True, True, True, False, True, "https://pokepast.es/04d4345bf38ca24a/raw"],
  "Drampa-Mega": ["A-", 7, True, True, False, False, True, True, True, False, True, False, "https://pokepast.es/982683ab85f52a5c/raw"],
  "Eelektross-Mega": ["C-", 1, True, True, False, False, False, True, False, False, True, False, "https://pokepast.es/e0d73e62b40dbab1/raw"],
  "Electrode": ["B", 5, False, True, False, False, False, False, True, False, True, True, "https://pokepast.es/37b4e0c7ecf12152/raw"],

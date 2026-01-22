@@ -163,7 +163,7 @@ class SSBCog(commands.Cog):
                     texto_pokepaste=await self.obtener_texto_pokepaste(listaPokemon_lower[pokemon_lower][12], self.session)
                     lista_pokepastes.append(texto_pokepaste)
             
-            paste_final= await self.fusionarpastes(lista_pokepastes, ctx.author.id)
+            paste_final= await self.fusionarpastes(lista_pokepastes)
 
             await ctx.send(f"Equipo final: {paste_final}")
 
@@ -208,9 +208,9 @@ class SSBCog(commands.Cog):
 
     
 
-    async def fusionarpastes(self, lista_pokepastes, user_id):
+    async def fusionarpastes(self, lista_pokepastes):
         equipo = "".join(lista_pokepastes)
-        url_pokepaste = await self.crear_pokepaste(equipo, f"Equipo SSB <@{user_id}>")
+        url_pokepaste = await self.crear_pokepaste(equipo, f"Equipo SSB")
         return url_pokepaste
 
 
