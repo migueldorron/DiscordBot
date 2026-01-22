@@ -160,7 +160,7 @@ class SSBCog(commands.Cog):
             for pokemon in nombres:
                 pokemon_lower=pokemon.lower()
                 if pokemon_lower in listaPokemon_lower:
-                    texto_pokepaste=await self.obtener_texto_pokepaste(listaPokemon_lower[pokemon_lower][12])
+                    texto_pokepaste=await self.obtener_texto_pokepaste(listaPokemon_lower[pokemon_lower][12], self.session)
                     lista_pokepastes.append(texto_pokepaste)
             
             paste_final= await self.fusionarpastes(lista_pokepastes, ctx.author.id)
