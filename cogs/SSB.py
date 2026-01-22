@@ -1,13 +1,18 @@
 import discord
 import databases.pokesSSB
 from discord.ext import commands
-
+import requests
+import aiohttp
 
 class SSBCog(commands.Cog):
     listaPokemon=databases.pokesSSB.listaPokemon
     formatos=databases.pokesSSB.formatos
     def __init__(self, bot):
         self.bot = bot
+        self.session = aiohttp.ClientSession()
+
+    async def cog_unload(self):
+        await self.session.close()
 
     @commands.command()
     async def puntos(self, ctx, *, input_pokemon):
@@ -58,7 +63,7 @@ class SSBCog(commands.Cog):
                     datos = listaPokemon_lower[pokemon_lower]
                     sumaEquipo += datos[1]
                     rangosEquipo += datos[0] + " "
-                    formatosPokeTemporal = datos[2:] 
+                    formatosPokeTemporal = datos[2:11] 
                     formatosPoke[pokemon] = formatosPokeTemporal
 
                 else:
@@ -140,5 +145,75 @@ class SSBCog(commands.Cog):
         except Exception as e:
             await ctx.send(f"Error: {e}")
     
+    @commands.command()
+    async def crearequipo(self, ctx, *, input_pokemon):
+        try:
+            nombres = [nombre.strip() for nombre in input_pokemon.split("/")]
+
+            if len(nombres) > 6:
+                await ctx.send("Copiaste mal el team preview. Demasiados elementos.")
+                return
+            
+            listaPokemon_lower = {k.lower(): v for k, v in self.listaPokemon.items()}
+
+
+            lista_pokepastes=[]
+            for pokemon in nombres:
+                pokemon_lower=pokemon.lower()
+                if pokemon_lower in listaPokemon_lower:
+                    lista_pokepastes.append(listaPokemon_lower[pokemon_lower][12])
+            
+            paste_final= await self.fusionarpastes(lista_pokepastes, ctx.author.id)
+
+            await ctx.send(f"Equipo final: {paste_final}")
+
+        except Exception as e:
+            await ctx.send(f"Error: {e}")
+
+
+
+
+    async def crear_pokepaste(self, texto, titulo):
+        url = "https://pokepast.es/create"
+        data = {
+            "paste": texto,
+            "title": titulo
+        }
+        headers = {
+            "User-Agent": (
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/142.0.0.0 Safari/537.36"
+            ),
+            "Origin": "https://pokepast.es",
+            "Referer": "https://pokepast.es/"
+        }
+
+        async with self.session.post(
+            url,
+            data=data,
+            headers=headers,
+            allow_redirects=False
+        ) as resp:
+
+            if resp.status != 303:
+                text = await resp.text()
+                raise Exception(f"Error creando paste: {resp.status} | {text}")
+
+            location = resp.headers.get("Location")
+            if not location:
+                raise Exception("Pokepaste no devolvió Location header")
+
+            return "https://pokepast.es" + location
+
+    
+
+    async def fusionarpastes(self, lista_pokepastes, user_id):
+        equipo = "".join(lista_pokepastes)
+        url_pokepaste = await self.crear_pokepaste(equipo, f"Equipo SSB <@{user_id}>")
+        return url_pokepaste
+
+    
+
 async def setup(bot):
     await bot.add_cog(SSBCog(bot))
