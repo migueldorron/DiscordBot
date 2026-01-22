@@ -126,6 +126,11 @@ class MiscelaneoCog(commands.Cog):
     @commands.command()
     async def mandarcategoria(self, ctx, *, categoria: str):
         try:
+            blacklist=[294523943514013701]
+            if ctx.author.id in blacklist:
+                ctx.send("Estás baneado de mandar sugerencias.")
+                return
+            
             canal = self.bot.get_channel(self.awards_channel_id)
 
             if canal is None:
