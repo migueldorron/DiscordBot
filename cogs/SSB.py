@@ -62,7 +62,7 @@ class SSBCog(commands.Cog):
                     datos = listaPokemon_lower[pokemon_lower]
                     sumaEquipo += datos[1]
                     rangosEquipo += datos[0] + " "
-                    formatosPokeTemporal = datos[2:11] 
+                    formatosPokeTemporal = datos[2:-1] 
                     formatosPoke[pokemon] = formatosPokeTemporal
 
                 else:
@@ -170,8 +170,8 @@ Tiers en las que se permite tu equipo: {listaFormatosValidos}""")
             paste_final= await self.fusionarpastes(lista_pokepastes)
 
             await ctx.send(f"""Equipo final: {paste_final}
-                           Tiers: {tiers}
-                           Puntos: {puntos}""")
+Tiers: {tiers}
+Puntos: {puntos}""")
 
         except Exception as e:
             await ctx.send(f"Error: {e}")
