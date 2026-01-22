@@ -1,7 +1,6 @@
 import discord
 import databases.pokesSSB
 from discord.ext import commands
-import requests
 import aiohttp
 
 class SSBCog(commands.Cog):
@@ -161,7 +160,8 @@ class SSBCog(commands.Cog):
             for pokemon in nombres:
                 pokemon_lower=pokemon.lower()
                 if pokemon_lower in listaPokemon_lower:
-                    lista_pokepastes.append(listaPokemon_lower[pokemon_lower][12])
+                    texto_pokepaste=await self.obtener_texto_pokepaste(listaPokemon_lower[pokemon_lower][12])
+                    lista_pokepastes.append(texto_pokepaste)
             
             paste_final= await self.fusionarpastes(lista_pokepastes, ctx.author.id)
 
@@ -213,7 +213,15 @@ class SSBCog(commands.Cog):
         url_pokepaste = await self.crear_pokepaste(equipo, f"Equipo SSB <@{user_id}>")
         return url_pokepaste
 
-    
+
+    async def obtener_texto_pokepaste(url, session: aiohttp.ClientSession):
+        headers = {"User-Agent": "Mozilla/5.0"}
+        async with session.get(url, headers=headers) as resp:
+            if resp.status != 200:
+                text = await resp.text()
+                raise Exception(f"Error al obtener Poképaste RAW: {resp.status} | {text}")
+            return await resp.text()
+            
 
 async def setup(bot):
     await bot.add_cog(SSBCog(bot))
